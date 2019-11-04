@@ -50,25 +50,29 @@
     <div class="buscador-libro">
       <h3>Buscar en Google Books</h3>
       <form [formGroup]="googleForm" (ngSubmit)="buscarPorIsbn()">
+        <span>
+          ISBN 13:
+        </span>
         <div class="input-group">
-          <label for="campo-fecha-adquisicion">
-            ISBN 13:
-            <input class="form-control" type="number" id="campo-fecha-adquisicion" formControlName="isbnApiCampo"
-              placeholder="9780061199004" required>
-          </label>
-            <button class="btn btn-primary btn-block" [disabled]="!googleForm.valid">
-              Buscar
-            </button>
+          <input class="form-control" type="number" id="campo-fecha-adquisicion" formControlName="isbnApiCampo"
+            placeholder="i.e. 9780061199004" required>
+          <button class="btn btn-primary btn-block" [disabled]="!googleForm.valid">
+            Buscar
+          </button>
         </div>
       </form>
-      <div *ngIf="libro">
-        <p>Titutlo :{{libro.titulo}}</p>
-        <p>Autor :{{libro.autor}}</p>
-        <p>Desc :{{libro.descripcion}}</p>
-        <p>No. Pag: {{libro.noPaginas}}</p>
-        <p>Isbn: {{libro.isbn}}</p>
-        <p *ngIf="libro.editorial">Editorial: {{libro.editorial}}</p>
-        <img *ngIf="libro.portada" [src]="libro.portada" alt="Portada del libro">
+      <div class="card" *ngIf="libro">
+        <div class="card-header">
+            <h4 class="card-title">Titutlo: {{libro.titulo}}</h4>
+            <p class="card-subtitle">Autor: {{libro.autor}}</p>
+        </div>
+        <div class="card-body">
+          <p class="card-text">Desc: {{libro.descripcion}}</p>
+          <p>No. Pag: {{libro.noPaginas}}</p>
+          <p>ISBN 13: {{libro.isbn}}</p>
+          <p *ngIf="libro.editorial">Editorial: {{libro.editorial}}</p>
+          <img *ngIf="libro.portada" [src]="libro.portada" alt="Portada del libro">
+        </div>
       </div>
     </div>
   </div>
