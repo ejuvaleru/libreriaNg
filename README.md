@@ -4,6 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Para correr la app en modo "Electron" utiliza el comando 'npm run electron-build', esto ejecutará el comando 'ng build' y compilará la app de Angular a una app de Electron.
 Puedes usar estos links para obtener más información (además de aquí me estoy basando):
+
 Angular Documentation: 'https://angular.io/start'.
 
 Angular-Electron (git oficial): 'https://github.com/maximegris/angular-electron'.
@@ -11,6 +12,9 @@ Angular-Electron (git oficial): 'https://github.com/maximegris/angular-electron'
 Cómo crear una app con Angular y Electron: 'https://medium.com/@KevinBueno_/creando-una-app-de-escritorio-con-angular-electron-y-firebase-parte-1-fa643a2c81ac'.
 
 Ngx-Electron, para usar Apis Nativas: 'https://www.npmjs.com/package/ngx-electron'.
+
+Por último, pero no menos importante, aquí hay una guía de como usar SQLite con Angular (ojo, no con Electron):
+'https://stackoverflow.com/questions/55438664/using-sqlite-as-database-for-angular-v7'.
 
 ## Development server
 
