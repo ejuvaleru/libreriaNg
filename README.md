@@ -16,6 +16,9 @@ Ngx-Electron, para usar Apis Nativas: 'https://www.npmjs.com/package/ngx-electro
 Por último, pero no menos importante, aquí hay una guía de como usar SQLite con Angular (ojo, no con Electron):
 'https://stackoverflow.com/questions/55438664/using-sqlite-as-database-for-angular-v7'.
 
+Y una guía del bendito freeCodeCamp donde sí utiliza SQLite de Electron y usando ngx-electron crea un servicio que maneja el "server" (ipc):
+https://www.freecodecamp.org/news/creating-an-electron-app-using-angular-and-sqlite3-24ca7d892810/.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
