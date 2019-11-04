@@ -29,6 +29,7 @@ export class AgregarComponent implements OnInit {
   });
 
   autor;
+  isbnFromApi;
   libro;
   items: Resultado;
 
@@ -56,20 +57,30 @@ export class AgregarComponent implements OnInit {
     this.router.navigateByUrl('');
   }
 
-  async buscarPorIsbn () {
+  async buscarPorIsbn() {
     console.log(this.googleForm.get('isbnApiCampo').value);
     const isbn = this.googleForm.get('isbnApiCampo').value;
-    await this.bookService.getLibroByIsbn(isbn).subscribe(res =>{
+    await this.bookService.getLibroByIsbn(isbn).subscribe(res => {
       this.items = res;
+      console.log(res);
       this.items.items.forEach(element => {
         // console.log(element.volumeInfo.authors);
         element.volumeInfo.authors.forEach(a => {
           this.autor = a;
         });
+        element.volumeInfo.industryIdentifiers.forEach(e => {
+          if (e.type === 'ISBN_13') {
+            this.isbnFromApi = e.identifier;
+          }
+        });
         this.libro = {
           titulo: element.volumeInfo.title,
           autor: this.autor,
-          descripcion: element.volumeInfo.description
+          descripcion: element.volumeInfo.description,
+          noPaginas: element.volumeInfo.pageCount,
+          isbn: this.isbnFromApi,
+          editorial: element.volumeInfo.publisher,
+          portada: element.volumeInfo.imageLinks.thumbnail,
         };
       });
     });

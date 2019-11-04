@@ -1,37 +1,46 @@
 <div class="container">
+  <a class="btn btn-light" routerLink="/">Volver</a>
   <h2>Agregar Libro</h2>
   <div class="formulario">
     <div class="formulario-libro">
       <form class="p-4" [formGroup]="libroForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <input class="form-control" type="text" id="campo-titulo" placeholder="Título" formControlName="campoTitulo" autofocus>
+          <input class="form-control" type="text" id="campo-titulo" placeholder="Título" formControlName="campoTitulo"
+            autofocus>
         </div>
         <div class="form-group">
           <input class="form-control" type="text" id="campo-autor" formControlName="campoAutor" placeholder="Autor">
         </div>
         <div class="form-group">
-          <input class="form-control" type="number" id="campo-isbn" formControlName="campoIsbn" placeholder="ISBN" required>
+          <input class="form-control" type="number" id="campo-isbn" formControlName="campoIsbn" placeholder="ISBN"
+            required>
         </div>
         <div class="form-group">
-          <input class="form-control" type="number" id="campo-no-de-edicion" formControlName="campoEdicion" placeholder="No. Edición">
+          <input class="form-control" type="number" id="campo-no-de-edicion" formControlName="campoEdicion"
+            placeholder="No. Edición">
         </div>
         <div class="form-group">
-          <input class="form-control" type="number" id="campo-num-de-paginas" formControlName="campoPaginas" placeholder="No. Páginas">
+          <input class="form-control" type="number" id="campo-num-de-paginas" formControlName="campoPaginas"
+            placeholder="No. Páginas">
         </div>
         <div class="form-group">
           <input class="form-control" type="text" id="campo-estado" formControlName="campoEstado" placeholder="Estado">
         </div>
         <div class="form-group">
-          <input class="form-control" type="text" id="campo-descripcion" formControlName="campoDesc" placeholder="Descripción">
+          <input class="form-control" type="text" id="campo-descripcion" formControlName="campoDesc"
+            placeholder="Descripción">
         </div>
         <div class="form-group">
-          <input class="form-control" type="number" id="campo-costo-compra" formControlName="campoCostoCompra" placeholder="Costo de compra">
+          <input class="form-control" type="number" id="campo-costo-compra" formControlName="campoCostoCompra"
+            placeholder="Costo de compra">
         </div>
         <div class="form-group">
-          <input class="form-control" type="number" id="campo-costo-venta" formControlName="campoCostoVenta" placeholder="Costo venta">
+          <input class="form-control" type="number" id="campo-costo-venta" formControlName="campoCostoVenta"
+            placeholder="Costo venta">
         </div>
         <div class="form-group">
-          <input class="form-control" type="date" id="campo-fecha-adquisicion" formControlName="campoFecha" placeholder="Fecha de adquisición">
+          <input class="form-control" type="date" id="campo-fecha-adquisicion" formControlName="campoFecha"
+            placeholder="Fecha de adquisición">
         </div>
         <button class="btn btn-primary btn-block" type="submit" [disabled]="!libroForm.valid">
           Agregar
@@ -39,23 +48,28 @@
       </form>
     </div>
     <div class="buscador-libro">
-      <h3>Buscar en google</h3>
+      <h3>Buscar en Google Books</h3>
       <form [formGroup]="googleForm" (ngSubmit)="buscarPorIsbn()">
         <div class="input-group">
-          <input class="form-control" type="number" id="campo-fecha-adquisicion" formControlName="isbnApiCampo" placeholder="ISBN" required minlength="8">
-          <span class="input-group-btn" style="margin-left: 5px;">
-            <button class="btn btn-primary" [disabled]="!googleForm.valid">
+          <label for="campo-fecha-adquisicion">
+            ISBN 13:
+            <input class="form-control" type="number" id="campo-fecha-adquisicion" formControlName="isbnApiCampo"
+              placeholder="9780061199004" required>
+          </label>
+            <button class="btn btn-primary btn-block" [disabled]="!googleForm.valid">
               Buscar
             </button>
-          </span>
         </div>
       </form>
       <div *ngIf="libro">
-          <p >Titutlo :{{libro.titulo}}</p>
-          <p >Autor :{{libro.autor}}</p>
-          <p >Desc :{{libro.descripcion}}</p>
+        <p>Titutlo :{{libro.titulo}}</p>
+        <p>Autor :{{libro.autor}}</p>
+        <p>Desc :{{libro.descripcion}}</p>
+        <p>No. Pag: {{libro.noPaginas}}</p>
+        <p>Isbn: {{libro.isbn}}</p>
+        <p *ngIf="libro.editorial">Editorial: {{libro.editorial}}</p>
+        <img *ngIf="libro.portada" [src]="libro.portada" alt="Portada del libro">
       </div>
-      <h2>Holaa</h2>
     </div>
   </div>
 </div>
