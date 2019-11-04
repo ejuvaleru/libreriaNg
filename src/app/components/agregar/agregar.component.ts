@@ -25,13 +25,14 @@ export class AgregarComponent implements OnInit {
   });
 
   googleForm = this.fb.group({
-    isbnApiCampo: ['', Validators.required],
+    isbnApiCampo: ['', [Validators.required, Validators.minLength(13)]],
   });
 
   autor;
   isbnFromApi;
   libro;
   items: Resultado;
+  cargando = false;
 
   constructor(
     private fb: FormBuilder,
@@ -58,10 +59,15 @@ export class AgregarComponent implements OnInit {
   }
 
   async buscarPorIsbn() {
+    this.cargando = true;
     console.log(this.googleForm.get('isbnApiCampo').value);
     const isbn = this.googleForm.get('isbnApiCampo').value;
     await this.bookService.getLibroByIsbn(isbn).subscribe(res => {
       this.items = res;
+      if (this.items.totalItems === 0) {
+        this.cargando = false;
+        return;
+      }
       console.log(res);
       this.items.items.forEach(element => {
         // console.log(element.volumeInfo.authors);
@@ -73,6 +79,7 @@ export class AgregarComponent implements OnInit {
             this.isbnFromApi = e.identifier;
           }
         });
+        this.cargando = false;
         this.libro = {
           titulo: element.volumeInfo.title,
           autor: this.autor,
@@ -86,8 +93,25 @@ export class AgregarComponent implements OnInit {
     });
   }
 
+  rellenarForm() {
+    this.libroForm.controls['campoAutor'].setValue(this.autor);
+    this.libroForm = this.fb.group({
+      campoTitulo: [this.libro.titulo],
+      campoAutor: [this.autor],
+      campoIsbn: [this.isbnFromApi],
+      campoEdicion: [''],
+      campoPaginas: [this.libro.noPaginas],
+      campoEstado: [''],
+      campoDesc: [this.libro.descripcion],
+      campoCostoCompra: [''],
+      campoCostoVenta: [''],
+      campoFecha: [''],
+    });
+  }
+
 }
 
 interface Resultado {
   items?: any;
+  totalItems?: any;
 }

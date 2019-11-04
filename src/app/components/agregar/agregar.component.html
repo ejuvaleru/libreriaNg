@@ -47,31 +47,50 @@
         </button>
       </form>
     </div>
+    <!-- AQUÍ ESTÁ EL BUSCADOR EN LA API DE GOOGLE-->
     <div class="buscador-libro">
       <h3>Buscar en Google Books</h3>
+      <!--FORMULARIO DE BÚSQUEDA-->
       <form [formGroup]="googleForm" (ngSubmit)="buscarPorIsbn()">
         <span>
           ISBN 13:
         </span>
         <div class="input-group">
           <input class="form-control" type="number" id="campo-fecha-adquisicion" formControlName="isbnApiCampo"
-            placeholder="i.e. 9780061199004" required>
-          <button class="btn btn-primary btn-block" [disabled]="!googleForm.valid">
+            placeholder="i.e. 9780061199004" required minlength="8">
+          <button class="btn btn-primary btn-block" [disabled]="!googleForm.valid || cargando">
             Buscar
           </button>
         </div>
       </form>
+      <!--RESULTADOS DE BÚSQUEDA-->
+      <div *ngIf="cargando" class="text-center">
+        <div class="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div class="m-4" *ngIf="items?.totalItems === 0">
+        <p class="text-center">No hay resultados que coincidan. Intente otra vez.</p>
+      </div>
       <div class="card" *ngIf="libro">
         <div class="card-header">
-            <h4 class="card-title">Titutlo: {{libro.titulo}}</h4>
-            <p class="card-subtitle">Autor: {{libro.autor}}</p>
+          <h4 class="card-title">Titutlo: {{libro.titulo}}</h4>
+          <p class="card-subtitle">Autor: {{libro.autor}}</p>
         </div>
         <div class="card-body">
           <p class="card-text">Desc: {{libro.descripcion}}</p>
           <p>No. Pag: {{libro.noPaginas}}</p>
           <p>ISBN 13: {{libro.isbn}}</p>
           <p *ngIf="libro.editorial">Editorial: {{libro.editorial}}</p>
-          <img *ngIf="libro.portada" [src]="libro.portada" alt="Portada del libro">
+          <div class="text-center">
+            <img *ngIf="libro.portada" [src]="libro.portada" alt="Portada del libro">
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-info" (click)="rellenarForm()">Rellenar formulario</button>
         </div>
       </div>
     </div>
