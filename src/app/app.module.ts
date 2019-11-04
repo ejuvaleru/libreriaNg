@@ -4,13 +4,27 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+// Importamos esto para usar formularios 'reactivos'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// Importamos esta clase para realizar peticiones Http con la clase HttpClient
+import { HttpClientModule } from '@angular/common/http';
+
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AgregarComponent } from './components/agregar/agregar.component';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DashboardComponent,
+    AgregarComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,19 @@
+html {
+    box-sizing: border-box;
+    }
+    *, *:before, *:after {
+    box-sizing: inherit;
+    }
+    body, input {
+    font: menu;
+    }
+
+    .formulario{
+        display: flex;
+    }
+    .formulario-libro{
+        flex: 1;
+    }
+    .buscador-libro{
+        flex: 1;
+    }
