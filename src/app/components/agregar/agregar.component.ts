@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { BookapiService } from 'src/app/shared/bookapi.service';
+import { BooksService } from 'src/app/shared/books.service';
 
 @Component({
   selector: 'app-agregar',
@@ -37,7 +38,8 @@ export class AgregarComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private bookService: BookapiService,
+    private bookApiService: BookapiService,
+    private librosService: BooksService,
   ) { }
 
   ngOnInit() {
@@ -53,6 +55,8 @@ export class AgregarComponent implements OnInit {
     // O así
     console.log(this.libroForm.get('campoAutor').value);
 
+    this.librosService.agregarLibro(resultado);
+
     /* Utilizando el angular Router, podemos navegar entre páginas, así que es muy util para volver automáticamente
      cuando el formulario es llenado y enviado */
     this.router.navigateByUrl('');
@@ -62,7 +66,7 @@ export class AgregarComponent implements OnInit {
     this.cargando = true;
     console.log(this.googleForm.get('isbnApiCampo').value);
     const isbn = this.googleForm.get('isbnApiCampo').value;
-    await this.bookService.getLibroByIsbn(isbn).subscribe(res => {
+    await this.bookApiService.getLibroByIsbn(isbn).subscribe(res => {
       this.items = res;
       if (this.items.totalItems === 0) {
         this.cargando = false;

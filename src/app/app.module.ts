@@ -12,12 +12,14 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AgregarComponent } from './components/agregar/agregar.component';
+import { EditarComponent } from './componets/editar/editar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    AgregarComponent
+    AgregarComponent,
+    EditarComponent
   ],
   imports: [
     BrowserModule,

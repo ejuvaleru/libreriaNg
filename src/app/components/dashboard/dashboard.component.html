@@ -1,32 +1,34 @@
 <div class="container mt-4">
-  <h2>Inicio</h2>
-  <a class="btn btn-primary" routerLink="/agregar">Agregar libro</a>
-  <div class="container p-4">
-      <table class="table table-hover">
-          <thead>
-              <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">ISBN</th>
-                  <th scope="col">Precio</th>
-                  <th scope="col">Descripción</th>
-                  <th scope="col">Acciones</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>123</td>
-                  <td>Nombre</td>
-                  <td>13e3232323</td>
-                  <td>$ 100.00</td>
-                  <td>Un libro chido</td>
-                  <td>
-                      <button class="btn btn-secondary">Editar</button>
-                      <button class="btn btn-danger">Eliminar</button>
-                  </td>
-              </tr>
-          </tbody>
-      </table>
-  </div>
+    <h2>Inicio</h2>
+    <a class="btn btn-primary" routerLink="/agregar">Agregar libro</a>
+    <div class="container p-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Costo Compra</th>
+                    <th scope="col">Costo Venta</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of libros; let i = index">
+                    <td>{{i}}</td>
+                    <td>{{item.campoAutor}}</td>
+                    <td>{{item.campoIsbn}}</td>
+                    <td>{{item.campoCostoCompra | currency:'MXN'}}</td>
+                    <td>{{item.campoCostoVenta | currency:'MXN'}}</td>
+                    <td>{{item.campoDesc | slice:0:50}}</td>
+                    <td>
+                        <button class="btn btn-secondary">Editar</button>
+                        <button class="btn btn-danger" (click)="eliminarLibro(i)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
