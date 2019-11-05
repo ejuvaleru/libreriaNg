@@ -1,12 +1,19 @@
 <div class="container mt-4">
     <h2>Inicio</h2>
-    <a class="btn btn-primary" routerLink="/agregar">Agregar libro</a>
-    <div class="container p-4">
+    <a *ngIf="libros?.length > 0" class="btn btn-primary" routerLink="/agregar">Agregar libro</a>
+    <div class="container p-4" *ngIf="libros?.length === 0">
+        <h4 class="text-center">No hay nada agregado aún.</h4>
+        <div class="text-center">
+            <a class="btn btn-primary" routerLink="/agregar">Agregar tu primer libro</a>
+        </div>
+    </div>
+    <div class="container p-4" *ngIf="libros?.length > 0">
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Título</th>
+                    <th scope="col">Autor</th>
                     <th scope="col">ISBN</th>
                     <th scope="col">Costo Compra</th>
                     <th scope="col">Costo Venta</th>
@@ -17,13 +24,15 @@
             <tbody>
                 <tr *ngFor="let item of libros; let i = index">
                     <td>{{i}}</td>
+                    <td>{{item.campoTitulo}}</td>
                     <td>{{item.campoAutor}}</td>
                     <td>{{item.campoIsbn}}</td>
                     <td>{{item.campoCostoCompra | currency:'MXN'}}</td>
                     <td>{{item.campoCostoVenta | currency:'MXN'}}</td>
                     <td>{{item.campoDesc | slice:0:50}}</td>
                     <td>
-                        <button class="btn btn-secondary">Editar</button>
+                        <a class="btn btn-secondary" routerLink="/editar/{{i}}"
+                            routerLinkActive="router-link-active">Editar</a>
                         <button class="btn btn-danger" (click)="eliminarLibro(i)">Eliminar</button>
                     </td>
                 </tr>

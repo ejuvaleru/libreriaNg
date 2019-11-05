@@ -11,15 +11,17 @@ export class BooksService {
 
   constructor() { }
 
+  // Método para agregar, aquí sustituimos con una query
   agregarLibro(libro) {
     this.libros.push(libro);
   }
 
-  // When user selects edit option
-  editar(id) {
-
+  // Método de consulta, ya sea para editar o ver detalles, aquí sustituimos con una query
+  obtenerLibroId(id) {
+    return this.libros[id];
   }
 
+  // Método para eliminar, aquí sustituimos con una query
   eliminar(id) {
     this.libros.splice(id, 1);
   }

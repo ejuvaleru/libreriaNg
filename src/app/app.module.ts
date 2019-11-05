@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AgregarComponent } from './components/agregar/agregar.component';
-import { EditarComponent } from './componets/editar/editar.component';
+import { EditarComponent } from './components/editar/editar.component';
 
 @NgModule({
   declarations: [
