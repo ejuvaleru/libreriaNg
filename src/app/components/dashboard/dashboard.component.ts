@@ -16,8 +16,10 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.libros = this.libroService.libros;
-    console.log(this.libros);
+    this.libroService.getLibros().subscribe(l => {
+      this.libros = l.data;
+      console.log(this.libros);
+    });
   }
 
   eliminarLibro(i) {

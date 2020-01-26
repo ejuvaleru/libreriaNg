@@ -13,7 +13,7 @@ export class EditarComponent implements OnInit {
   libro;
   // ID, lo obtenemos a traves de la URL, después será un id real, ahorita es la posición en el array
   id;
-
+  titulo = '';
   formEditarLibro: FormGroup;
 
   constructor(
@@ -28,41 +28,30 @@ export class EditarComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     console.log(this.id);
-    this.libro = this.bookService.obtenerLibroId(this.id);
-    console.log(this.libro);
-    this.formulario();
+    this.libro = this.bookService.obtenerLibroId(this.id).subscribe(l => {
+      this.libro = l;
+      this.formulario();
+    });
   }
 
   // Formulario
   async formulario() {
     this.formEditarLibro = await this.fb.group({
-      'campoTitulo': [this.libro.campoTitulo],
-      'campoAutor': [this.libro.campoAutor],
-      'campoIsbn': [this.libro.campoIsbn],
-      'campoEdicion': [this.libro.campoEdicion],
-      'campoPaginas': [this.libro.campoPaginas],
-      'campoEstado': [this.libro.campoEstado],
-      'campoDesc': [this.libro.campoDesc],
-      'campoCostoCompra': [this.libro.campoCostoCompra],
-      'campoCostoVenta': [this.libro.campoCostoVenta],
-      'campoFecha': [this.libro.campoFecha],
+      'campoTitulo': [this.libro.titulo],
+      'campoIsbn': [this.libro.isbn],
     });
   }
 
   // Con este método actualizamos el libro
   onSubmit() {
-    this.libro.campoTitulo = this.formEditarLibro.get('campoTitulo').value;
-    this.libro.campoAutor = this.formEditarLibro.get('campoAutor').value;
-    this.libro.campoIsbn = this.formEditarLibro.get('campoIsbn').value;
-    this.libro.campoEdicion = this.formEditarLibro.get('campoEdicion').value;
-    this.libro.campoPaginas = this.formEditarLibro.get('campoPaginas').value;
-    this.libro.campoEstado = this.formEditarLibro.get('campoEstado').value;
-    this.libro.campoDesc = this.formEditarLibro.get('campoDesc').value;
-    this.libro.campoCostoCompra = this.formEditarLibro.get('campoCostoCompra').value;
-    this.libro.campoCostoVenta = this.formEditarLibro.get('campoCostoVenta').value;
-    this.libro.campoFecha = this.formEditarLibro.get('campoFecha').value;
-    console.log('Editado: ', this.libro);
-    this.router.navigateByUrl('/');
+    this.libro.titulo = this.formEditarLibro.get('campoTitulo').value;
+    this.libro.isbn = this.formEditarLibro.get('campoIsbn').value;
+    this.bookService.actualizarLibro(this.id, this.libro).subscribe(res => {
+      console.log('RES', res);
+      if (res.message === 'Libro actualizado correctamente') {
+        this.router.navigateByUrl('/');
+      }
+    });
   }
 
 }

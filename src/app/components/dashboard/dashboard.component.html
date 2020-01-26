@@ -13,27 +13,19 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Título</th>
-                    <th scope="col">Autor</th>
                     <th scope="col">ISBN</th>
-                    <th scope="col">Costo Compra</th>
-                    <th scope="col">Costo Venta</th>
-                    <th scope="col">Descripción</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of libros; let i = index">
-                    <td>{{i}}</td>
-                    <td>{{item.campoTitulo}}</td>
-                    <td>{{item.campoAutor}}</td>
-                    <td>{{item.campoIsbn}}</td>
-                    <td>{{item.campoCostoCompra | currency:'MXN'}}</td>
-                    <td>{{item.campoCostoVenta | currency:'MXN'}}</td>
-                    <td>{{item.campoDesc | slice:0:50}}</td>
+                    <td>{{item.ID_libro}}</td>
+                    <td>{{item.titulo}}</td>
+                    <td>{{item.isbn}}</td>
                     <td>
-                        <a class="btn btn-secondary" routerLink="/editar/{{i}}"
+                        <a class="btn btn-secondary" routerLink="/editar/{{item.ID_libro}}"
                             routerLinkActive="router-link-active">Editar</a>
-                        <button class="btn btn-danger" (click)="eliminarLibro(i)">Eliminar</button>
+                        <!-- <button class="btn btn-danger" (click)="eliminarLibro(item.ID_libro)">Eliminar</button> -->
                     </td>
                 </tr>
             </tbody>

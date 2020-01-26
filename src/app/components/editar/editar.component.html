@@ -1,42 +1,14 @@
 <div class="container mt-4">
   <a class="btn btn-primary" routerLink="/" routerLinkActive="router-link-active">Volver</a>
+  <h2>{{libro?.titulo}}</h2>
+  <h3>{{libro?.isbn}}</h3>
   <form *ngIf="libro" [formGroup]="formEditarLibro" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <input class="form-control" type="text" id="campo-titulo" placeholder="Título" formControlName="campoTitulo"
         autofocus>
     </div>
     <div class="form-group">
-      <input class="form-control" type="text" id="campo-autor" formControlName="campoAutor" placeholder="Autor">
-    </div>
-    <div class="form-group">
       <input class="form-control" type="number" id="campo-isbn" formControlName="campoIsbn" placeholder="ISBN" required>
-    </div>
-    <div class="form-group">
-      <input class="form-control" type="number" id="campo-no-de-edicion" formControlName="campoEdicion"
-        placeholder="No. Edición">
-    </div>
-    <div class="form-group">
-      <input class="form-control" type="number" min="1" id="campo-num-de-paginas" formControlName="campoPaginas"
-        placeholder="No. Páginas">
-    </div>
-    <div class="form-group">
-      <input class="form-control" type="text" id="campo-estado" formControlName="campoEstado" placeholder="Estado">
-    </div>
-    <div class="form-group">
-      <input class="form-control" type="text" id="campo-descripcion" formControlName="campoDesc"
-        placeholder="Descripción">
-    </div>
-    <div class="form-group">
-      <input class="form-control" type="number" id="campo-costo-compra" formControlName="campoCostoCompra"
-        placeholder="Costo de compra">
-    </div>
-    <div class="form-group">
-      <input class="form-control" type="number" id="campo-costo-venta" formControlName="campoCostoVenta"
-        placeholder="Costo venta">
-    </div>
-    <div class="form-group">
-      <input class="form-control" type="date" id="campo-fecha-adquisicion" formControlName="campoFecha"
-        placeholder="Fecha de adquisición">
     </div>
     <button class="btn btn-primary btn-block" type="submit" [disabled]="!formEditarLibro.valid">
       Actualizar
