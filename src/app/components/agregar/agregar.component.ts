@@ -39,7 +39,11 @@ export class AgregarComponent implements OnInit {
   editoriales = [];
   autores = [];
   libros = [];
-  ID_LIBRO : number =0;
+  ID_LIBRO = 0;
+  existeLibro = false;
+  existeAutor = false;
+  existeEditorial = false;
+  ejemplar: any;
 
   constructor(
     private fb: FormBuilder,
@@ -51,118 +55,103 @@ export class AgregarComponent implements OnInit {
   ngOnInit() {
   }
 
-  async onSubmit() {
-    // De esta manera accedemos al valor de todo el formulario
-    // this.libroForm.value;
-
-    // Así accedemos al valor de cada campo
-    const resultado = this.libroForm.value;
-    console.log(resultado.campoTitulo);
-    // O así
-    console.log(this.libroForm.get('campoAutor').value);
-    let existeLibro: boolean = false;
-    let existeAutor: boolean = false;
-    let existeEditorial: boolean = false;
-    const revisarCasos = async () => {
-      this.librosService.getEditoriales().subscribe(async l => {
-        this.editoriales = await l.data ;
-        //console.log(this.editoriales);
-        for (let editorial of this.editoriales) {
-          //console.log(editorial.nombre_editorial);
-          if (this.libro.editorial == editorial.nombre_editorial) {
-            console.log(this.libro.editorial + " es igual a " + editorial.nombre_editorial)
-            existeEditorial = true;
-          }
-        }
-      });
-      this.librosService.getAutores().subscribe(async l => {
-        this.autores = await l.data;
-        console.log(this.autores);
-        for (let autor of this.autores) {
-          if (this.libro.autor == autor.nombre_autor) {
-            console.log(this.libro.autor + " es igual a " + autor.nombre_autor)
-            existeAutor = true;
-          }
-        }
-      });
-      this.librosService.getLibros().subscribe(async l => {
-        this.libros =await l.data;
-        console.log(this.libros);
-        for (let libroRespuesta of this.libros) {
-          if (this.libro.isbn == libroRespuesta.isbn) {
-            console.log(this.libro.isbn + " es igual a " + libroRespuesta.isbn)
-            existeLibro = true;
-            this.ID_LIBRO = libroRespuesta.ID_libro;
-          }
-        }
-      });
-      console.log("esixre libro" , existeLibro);
-      if (existeLibro) {
-        //caso2 sí existe libro
-        let hoy = new Date();
-        let ejemplar = {
-          estado : this.libroForm.get('campoEstado'),
-          descripcion: this.libroForm.get('campoDesc').value,
-          costo_venta: this.libroForm.get('campoCostoVenta'),
-          costo_compra: this.libroForm.get('campoCostoCompra'),
-          costo_descuento: this.libroForm.get('campoCostoDescuento'),
-          url_fotografia: this.libro.portada,
-          fecha_adquisicion: hoy,
-          ID_LIBRO_libro: this.ID_LIBRO
-        };
-        this.librosService.insertarEjemplar(ejemplar).subscribe(l => {
-          console.log(l);
-          this.router.navigateByUrl('');
-        });
-
-      } else {//no existe libro
-        if (!existeAutor && !existeEditorial) {
-          //caso1
-        }
-        if (!existeAutor && existeEditorial) {
-          //caso3
-        }
-        if (existeEditorial && existeAutor) {
-          //caso4
-        }
-        if (existeAutor && !existeEditorial) {
-          //caso5
+  async getEditoriales() {
+    const res = this.librosService.getEditoriales().toPromise();
+    res.then(async e => {
+      this.editoriales = await e.data;
+      console.log('EDITORIALES ', this.editoriales);
+      // tslint:disable-next-line:prefer-const
+      for (let editorial of this.editoriales) {
+        if (this.libroForm.get('campoEditorial').value === editorial.nombre_editorial) {
+          console.log(this.libroForm.get('campoEditorial').value + ' es igual a ' + editorial.nombre_editorial);
+          return this.existeEditorial = true;
         }
       }
+    });
+  }
 
-    }
-    revisarCasos();
+  async getAutores() {
+    const res = this.librosService.getAutores().toPromise();
+    res.then(async l => {
+      this.autores = await l.data;
+      console.log(this.autores);
+      // tslint:disable-next-line:prefer-const
+      for (let autor of this.autores) {
+        if (this.libroForm.get('campoAutor').value === autor.nombre_autor) {
+          console.log(this.libroForm.get('campoAutor').value + ' es igual a ' + autor.nombre_autor);
+          return this.existeAutor = true;
+        }
+      }
+    });
+  }
 
-    this.libro = {
-      titulo: this.libroForm.get('campoTitulo').value,
-      autor: this.libroForm.get('campoAutor').value,
-      editorial: this.libroForm.get('campoEditorial').value,
-      edicion: this.libroForm.get('campoEdicion').value,
-      descripcion: this.libroForm.get('campoDesc').value,
-      noPaginas: this.libroForm.get('campoPaginas').value,
-      isbn: this.libroForm.get('campoIsbn').value,
-      portada: this.libroForm.get('campoTitulo').value,
-    };
-    let libro2 = {
-      "num_pagina": 420,
-      "num_edicion": 1,
-      "isbn": "isbnFowler",
-      "codigo_identificador": null,
-      "titulo": "Qué es filosofia",
-      "EDITORIAL_ID_editorial": 1,
-      "NOMENCLATURA_ID_NOMENCLATURA": 1
-    }
-    //console.log(this.libro);
+  async getLibros() {
+    const res = this.librosService.getLibros().toPromise();
+    res.then(async l => {
+      this.libros = await l.data;
+      console.log(this.libros);
+      // tslint:disable-next-line:prefer-const
+      for (let libroRespuesta of this.libros) {
+        if (this.libroForm.get('campoIsbn').value === libroRespuesta.isbn) {
+          console.log(this.libroForm.get('campoIsbn').value + ' es igual a ' + libroRespuesta.isbn);
+          this.ID_LIBRO = libroRespuesta.ID_libro;
+          this.existeLibro = true;
+          this.crear();
+        }
+      }
+    });
+  }
 
-    //this.librosService.insertarEjemplar(libro2).subscribe(l => {
-    //  console.log(l);
-    //});
+  async onSubmit() {
+    await this.getEditoriales().finally(async () => {
+      await this.getAutores().finally(async () => {
+        await this.getLibros().finally(async () => {
+        });
+      });
+    });
 
     /* Utilizando el angular Router, podemos navegar entre páginas, así que es muy util para volver automáticamente
      cuando el formulario es llenado y enviado */
-    
   }
 
+  crear() {
+    console.log('Existe libro', this.existeLibro);
+    if (this.existeLibro) {
+      console.log('YA ENTRÉ A SÍ EXISTE LIBRO ');
+      // caso2 sí existe libro
+      const hoy = new Date();
+      console.log('LIBRO ID ', this.ID_LIBRO);
+      this.ejemplar = {
+        estado: this.libroForm.get('campoEstado').value,
+        descripcion: this.libroForm.get('campoDesc').value,
+        costo_venta: this.libroForm.get('campoCostoVenta').value,
+        costo_compra: this.libroForm.get('campoCostoCompra').value,
+        costo_descuento: this.libroForm.get('campoCostoDescuento').value,
+        url_fotografia: 'urldesdeangular',
+        fecha_adquisicion: hoy.getDate(),
+        LIBRO_ID_libro: this.ID_LIBRO
+      };
+      console.log(this.ejemplar);
+      this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {
+        console.log(e);
+        this.router.navigateByUrl('');
+      });
+
+    } else {// no existe libro
+      if (!this.existeAutor && !this.existeEditorial) {
+        // caso1
+      }
+      if (!this.existeAutor && this.existeEditorial) {
+        // caso3
+      }
+      if (this.existeEditorial && this.existeAutor) {
+        // caso4
+      }
+      if (this.existeAutor && !this.existeEditorial) {
+        // caso5
+      }
+    }
+  }
   async buscarPorIsbn() {
     this.cargando = true;
     console.log(this.googleForm.get('isbnApiCampo').value);

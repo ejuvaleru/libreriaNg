@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,11 +8,11 @@ import { Observable } from 'rxjs';
 export class BooksService {
 
   url = 'http://localhost:4000/api/libros/';
+  myHeader = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
   constructor(
     private http: HttpClient,
   ) { }
-
 
   // TODO: más adelante aquí podríamos implementar los modelos definidos
   // Arreglo de libros o ejemplares
@@ -42,45 +42,29 @@ export class BooksService {
     return this.http.get(`${this.url}`);
   }
 
-  getEditoriales(): Observable<any>{
+  getEditoriales(): Observable<any> {
     return this.http.get(`http://localhost:4000/api/editoriales/`);
   }
 
-  getAutores():  Observable<any>{
+  getAutores(): Observable<any> {
     return this.http.get(`http://localhost:4000/api/autores/`);
   }
-  insertarAutor(autor): Observable<any>{
+  insertarAutor(autor): Observable<any> {
     //let autorNombre ={
     //  "nombre_autor": "Luis "
     //}
-    return this.http.post(`http://localhost:4000/api/autores/`,autor);
-  } 
+    return this.http.post(`http://localhost:4000/api/autores/`, autor);
+  }
 
-  insertarEditorial(editorial): Observable<any>{
-    let editorial2= {
-      "nombre_editorial": "The pragmatic bookshelf"
-    }
-    return this.http.post(`http://localhost:4000/api/editoriales/`,editorial2);
-  } 
+  insertarEditorial(editorial): Observable<any> {
+    return this.http.post(`http://localhost:4000/api/editoriales/`, editorial);
+  }
 
-  insertarAutorLibro(autorLibro): Observable<any>{
-    //let autorLibro2= {
-    //  "LIBRO_ID_libro": 1,
-    //  "AUTOR_ID_autor": 3
-    //}
-    return this.http.post(`http://localhost:4000/api/autoresLibros/`,autorLibro);
-  } 
-  insertarEjemplar(ejemplar): Observable<any>{
-    //let autorLibro2= {
-    //  "estado": "usado",
-    //  "descripcion": "hojas rayadas",
-    //  "costo_venta": 100,
-    //  "costo_compra": 20,
-    //  "costo_descuento": 80,
-    //  "url_fotografia": "http://tuCorazzon",
-    //  "fecha_adquisicion": "2020-01-15",
-    //  "LIBRO_ID_libro": 1
-    //}
-    return this.http.post(`http://localhost:4000/api/ejemplares/`,ejemplar);
-  } 
+  insertarAutorLibro(autorLibro): Observable<any> {
+    return this.http.post(`http://localhost:4000/api/autoresLibros/`, autorLibro);
+  }
+  insertarEjemplar(ejemplar): Observable<any> {
+    console.log(ejemplar);
+    return this.http.post(`http://localhost:4000/api/ejemplares/`, ejemplar, { headers: { 'Content-Type': 'application/json' }});
+  }
 }
