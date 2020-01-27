@@ -12,6 +12,9 @@
           <input class="form-control" type="text" id="campo-autor" formControlName="campoAutor" placeholder="Autor">
         </div>
         <div class="form-group">
+          <input class="form-control" type="text" id="campo-editorial" formControlName="campoEditorial" placeholder="Editorial">
+        </div>
+        <div class="form-group">
           <input class="form-control" type="number" id="campo-isbn" formControlName="campoIsbn" placeholder="ISBN"
             required>
         </div>
@@ -39,6 +42,10 @@
             placeholder="Costo venta">
         </div>
         <div class="form-group">
+          <input class="form-control" type="number" id="campo-costo-descuento" formControlName="campoCostoDescuento"
+            placeholder="Costo Descuento">
+        </div>
+        <div class="form-group">
           <input class="form-control" type="date" id="campo-fecha-adquisicion" formControlName="campoFecha"
             placeholder="Fecha de adquisición">
         </div>
@@ -56,7 +63,7 @@
           ISBN 13:
         </span>
         <div class="input-group">
-          <input class="form-control" type="number" id="campo-fecha-adquisicion" formControlName="isbnApiCampo"
+          <input class="form-control" type="number" id="campo-Isbn-Api" formControlName="isbnApiCampo"
             placeholder="i.e. 9780061199004" required minlength="8">
           <button class="btn btn-primary btn-block" [disabled]="!googleForm.valid || cargando">
             Buscar
