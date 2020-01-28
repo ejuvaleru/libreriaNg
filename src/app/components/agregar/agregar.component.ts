@@ -31,19 +31,27 @@ export class AgregarComponent implements OnInit {
     isbnApiCampo: ['', [Validators.required, Validators.minLength(13)]],
   });
 
-  autor;
+  items: Resultado;
   isbnFromApi;
   libro;
-  items: Resultado;
+
   cargando = false;
+
+  // Arrays que guardan las respuestas obtenidas desde la BD
   editoriales = [];
   autores = [];
   libros = [];
-  ID_LIBRO = 0;
+  // Banderas auxiliares para los casos de inserción
   existeLibro = false;
   existeAutor = false;
   existeEditorial = false;
+
   ejemplar: any;
+  idLibro = 0;
+  idUltimaEditorial = 0;
+  idUltimoAutor = 0;
+  idUltimoLibro = 0;
+  autor;
 
   constructor(
     private fb: FormBuilder,
@@ -119,29 +127,59 @@ export class AgregarComponent implements OnInit {
     if (this.existeLibro) {
       console.log('YA ENTRÉ A SÍ EXISTE LIBRO ');
       // caso2 sí existe libro
-      const hoy = new Date();
-      console.log('LIBRO ID ', this.ID_LIBRO);
-      const n = Math.random() * (0 - 99999) + 1;
-      this.ejemplar = {
-        estado: this.libroForm.get('campoEstado').value,
-        descripcion: this.libroForm.get('campoDesc').value,
-        costo_venta: this.libroForm.get('campoCostoVenta').value,
-        costo_compra: this.libroForm.get('campoCostoCompra').value,
-        costo_descuento: this.libroForm.get('campoCostoDescuento').value,
-        url_fotografia: `urldesdeangular${n}`,
-        fecha_adquisicion: hoy.getDate(),
-        LIBRO_ID_libro: this.ID_LIBRO
-      };
-      console.log(this.ejemplar);
-      this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {
-        console.log(e);
-        this.router.navigateByUrl('');
-      });
 
     } else {// no existe libro
       if (!this.existeAutor && !this.existeEditorial) {
         console.log('CASO 1');
-        // caso1
+        // caso1 no existe nada y se crea todo
+        this.insertarAutor().then(a => { // Inserta el autor
+          console.log('AUTOR INSERTADO', a);
+          if (a.data) {
+            this.librosService.getUltimoAutorAgregado().toPromise().then(uaa => {
+              console.log('ULTIMO AUTOR AGREGADO: ', uaa.data[0].maxIDautor);
+              this.idUltimoAutor = uaa.data[0].maxIDautor;
+            });
+            this.insertarEditorial().then(r => { // Inserta la editorial
+              console.log('EDITORIAL INSERTADA ', r);
+              if (r.data) {
+                this.librosService.getUltimaEditorialAgregada().toPromise().then(uea => {
+                  console.log('ULTIMA EDITORIAL AGREGADA: ', uea.data[0].maxIDeditorial);
+                  if (uea) {
+                    this.idUltimaEditorial = uea.data[0].maxIDeditorial;
+                    const libro = {
+                      num_pagina: this.libroForm.get('campoPaginas').value,
+                      num_edicion: this.libroForm.get('campoEdicion').value,
+                      EDITORIAL_ID_editorial: this.idUltimaEditorial,
+                      isbn: this.libroForm.get('campoIsbn').value,
+                      codigo_identificador: null,
+                      NOMENCLATURA_ID_NOMENCLATURA: 1,
+                      titulo: this.libroForm.get('campoTitulo').value,
+                    };
+                    this.librosService.insertarLibro(libro).toPromise().then(l => {
+                      if (l.data) {
+                        this.librosService.getUltimoLibroAgregado().toPromise().then(ula => {
+                          console.log('ULTIMO LIBRO AGREGADO ID', ula.data[0].maxIDlibro);
+                          this.idUltimoLibro = ula.data[0].maxIDlibro;
+                          const autorLibro = {
+                            LIBRO_ID_libro: this.idUltimoLibro,
+                            AUTOR_ID_autor: this.idUltimoAutor
+                          };
+                          this.insertarAutorLibro(autorLibro).then(res => {
+                            if (res.data) {
+                              this.idLibro = this.idUltimoLibro;
+                              this.insertarEjemplar();
+                            }
+                          });
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+
       }
       if (!this.existeAutor && this.existeEditorial) {
         // caso3
@@ -154,6 +192,56 @@ export class AgregarComponent implements OnInit {
       }
     }
   }
+
+  async insertarEjemplar() {
+    const hoy = new Date();
+    console.log('LIBRO ID ', this.idLibro);
+    const n = Math.random() * (0 - 99999) + 1; // Uso esto para generar una url de foto aleatoria para TEST
+
+    this.ejemplar = {
+      estado: this.libroForm.get('campoEstado').value,
+      descripcion: this.libroForm.get('campoDesc').value,
+      costo_venta: this.libroForm.get('campoCostoVenta').value,
+      costo_compra: this.libroForm.get('campoCostoCompra').value,
+      costo_descuento: this.libroForm.get('campoCostoDescuento').value,
+      url_fotografia: `urldesdeangular${n}`,
+      fecha_adquisicion: hoy,
+      LIBRO_ID_libro: this.idLibro
+    };
+
+    console.log(this.ejemplar);
+    this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {
+      console.log(e);
+      if (e.message) {
+        this.router.navigateByUrl('');
+      }
+    });
+
+  }
+
+  // Método para insertar editorial
+  async insertarEditorial() {
+    const editorial = {
+      nombre_editorial: this.libroForm.get('campoEditorial').value,
+    };
+    console.log('DESDE AGREGAR COMP EDITORIAL ', editorial);
+    return await this.librosService.insertarEditorial(editorial).toPromise();
+  }
+
+  // Método para insertar autor
+  async insertarAutor() {
+    const autor = {
+      nombre_autor: this.libroForm.get('campoAutor').value,
+    };
+    console.log('DESDE AGREGAR COMP autor ', autor);
+    return await this.librosService.insertarAutor(autor).toPromise();
+  }
+
+  // Método para isnertar AutorLibro
+  async insertarAutorLibro(autorLibro) {
+    return await this.librosService.insertarAutorLibro(autorLibro).toPromise();
+  }
+
   async buscarPorIsbn() {
     this.cargando = true;
     console.log(this.googleForm.get('isbnApiCampo').value);
