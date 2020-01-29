@@ -52,6 +52,8 @@ export class AgregarComponent implements OnInit {
   idUltimoAutor = 0;
   idUltimoLibro = 0;
   autor;
+  editorial;
+
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +74,7 @@ export class AgregarComponent implements OnInit {
       for (let editorial of this.editoriales) {
         if (this.libroForm.get('campoEditorial').value === editorial.nombre_editorial) {
           console.log(this.libroForm.get('campoEditorial').value + ' es igual a ' + editorial.nombre_editorial);
+          this.editorial = editorial.nombre_editorial;//PARA YA NO VOLVER A CONSULTAR EN LOS CASOS
           return this.existeEditorial = true;
         }
       }
@@ -87,6 +90,7 @@ export class AgregarComponent implements OnInit {
       for (let autor of this.autores) {
         if (this.libroForm.get('campoAutor').value === autor.nombre_autor) {
           console.log(this.libroForm.get('campoAutor').value + ' es igual a ' + autor.nombre_autor);
+          this.autor = autor.nombre_autor;//PARA YA NO VOLVER A CONSULTAR EN LOS CASOS
           return this.existeAutor = true;
         }
       }
@@ -127,23 +131,23 @@ export class AgregarComponent implements OnInit {
     if (this.existeLibro) {
       console.log('YA ENTRÉ A SÍ EXISTE LIBRO ');
       // caso2 sí existe libro
-      const hoy = new Date();	
-      console.log('LIBRO ID ', this.idLibro);	
-      const n = Math.random() * (0 - 99999) + 1;	
-      this.ejemplar = {	
-        estado: this.libroForm.get('campoEstado').value,	
-        descripcion: this.libroForm.get('campoDesc').value,	
-        costo_venta: this.libroForm.get('campoCostoVenta').value,	
-        costo_compra: this.libroForm.get('campoCostoCompra').value,	
-        costo_descuento: this.libroForm.get('campoCostoDescuento').value,	
-        url_fotografia: `urldesdeangular${n}`,	
-        fecha_adquisicion: hoy.getDate(),	
-        LIBRO_ID_libro: this.idLibro	
-      };	
-      console.log(this.ejemplar);	
-      this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {	
-        console.log(e);	
-        this.router.navigateByUrl('');	
+      const hoy = new Date();
+      console.log('LIBRO ID ', this.idLibro);
+      const n = Math.random() * (0 - 99999) + 1;
+      this.ejemplar = {
+        estado: this.libroForm.get('campoEstado').value,
+        descripcion: this.libroForm.get('campoDesc').value,
+        costo_venta: this.libroForm.get('campoCostoVenta').value,
+        costo_compra: this.libroForm.get('campoCostoCompra').value,
+        costo_descuento: this.libroForm.get('campoCostoDescuento').value,
+        url_fotografia: `urldesdeangular${n}`,
+        fecha_adquisicion: hoy.getDate(),
+        LIBRO_ID_libro: this.idLibro
+      };
+      console.log(this.ejemplar);
+      this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {
+        console.log(e);
+        this.router.navigateByUrl('');
       });
 
     } else {// no existe libro
@@ -201,12 +205,93 @@ export class AgregarComponent implements OnInit {
       }
       if (!this.existeAutor && this.existeEditorial) {
         // caso3
+        console.log('CASO 3');
+        this.insertarAutor().then(a => {
+          console.log('AUTOR INSERTADO', a);
+          if (a.data) {
+            this.librosService.getUltimoAutorAgregado().toPromise().then(uaa => {
+              console.log('ULTIMO AUTOR AGREGADO: ', uaa.data[0].maxIDautor);
+              this.idUltimoAutor = uaa.data[0].maxIDautor;
+              if (uaa) {
+                this.idUltimaEditorial = this.editorial //PORQUE SE LE ASIGNÓ EN LE METODO getEditoriales
+                const libro = {
+                  num_pagina: this.libroForm.get('campoPaginas').value,
+                  num_edicion: this.libroForm.get('campoEdicion').value,
+                  EDITORIAL_ID_editorial: this.idUltimaEditorial,
+                  isbn: this.libroForm.get('campoIsbn').value,
+                  codigo_identificador: null,
+                  NOMENCLATURA_ID_NOMENCLATURA: 1,
+                  titulo: this.libroForm.get('campoTitulo').value,
+                };
+                this.librosService.insertarLibro(libro).toPromise().then(l => {
+                  if (l.data) {
+                    this.librosService.getUltimoLibroAgregado().toPromise().then(ula => {
+                      console.log('ULTIMO LIBRO AGREGADO ID', ula.data[0].maxIDlibro);
+                      this.idUltimoLibro = ula.data[0].maxIDlibro;
+                      const autorLibro = {
+                        LIBRO_ID_libro: this.idUltimoLibro,
+                        AUTOR_ID_autor: this.idUltimoAutor
+                      };
+                      this.insertarAutorLibro(autorLibro).then(res => {
+                        if (res.data) {
+                          this.idLibro = this.idUltimoLibro;
+                          this.insertarEjemplar();
+                        }
+                      });
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
       }
       if (this.existeEditorial && this.existeAutor) {
         // caso4
+        console.log('CASO 4');
       }
       if (this.existeAutor && !this.existeEditorial) {
         // caso5
+        console.log('CASO 5'); //existe autor pero no editorial
+        this.insertarEditorial().then(e => {
+          console.log('EDITORIAL INSERTADA', e);
+          if(e.data){
+            this.librosService.getUltimaEditorialAgregada().toPromise().then(uea => {
+              console.log('ULTIMA EDICION AGREGADA: ', uea.data[0].maxIDeditorial);
+              this.idUltimaEditorial = uea.data[0].maxIDeditorial;
+              if(uea){
+                this.idUltimoAutor = this.autor //PORQUE SE LE ASIGNÓ EN EL METODO getAutores
+                const libro = {
+                  num_pagina: this.libroForm.get('campoPaginas').value,
+                  num_edicion: this.libroForm.get('campoEdicion').value,
+                  EDITORIAL_ID_editorial: this.idUltimaEditorial,
+                  isbn: this.libroForm.get('campoIsbn').value,
+                  codigo_identificador: null,
+                  NOMENCLATURA_ID_NOMENCLATURA: 1,
+                  titulo: this.libroForm.get('campoTitulo').value,
+                };
+                this.librosService.insertarLibro(libro).toPromise().then(l => {
+                  if (l.data) {
+                    this.librosService.getUltimoLibroAgregado().toPromise().then(ula => {
+                      console.log('ULTIMO LIBRO AGREGADO ID', ula.data[0].maxIDlibro);
+                      this.idUltimoLibro = ula.data[0].maxIDlibro;
+                      const autorLibro = {
+                        LIBRO_ID_libro: this.idUltimoLibro,
+                        AUTOR_ID_autor: this.idUltimoAutor
+                      };
+                      this.insertarAutorLibro(autorLibro).then(res => {
+                        if (res.data) {
+                          this.idLibro = this.idUltimoLibro;
+                          this.insertarEjemplar();
+                        }
+                      });
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
       }
     }
   }
