@@ -249,6 +249,35 @@ export class AgregarComponent implements OnInit {
       if (this.existeEditorial && this.existeAutor) {
         // caso4
         console.log('CASO 4');
+        this.idUltimoAutor = this.autor //PORQUE SE LE ASIGNÓ EN EL METODO getAutores
+        this.idUltimaEditorial = this.editorial // PORQUE SE LE ASIGNÓ EN EL METODO getAutores
+        const libro = {
+          num_pagina: this.libroForm.get('campoPaginas').value,
+          num_edicion: this.libroForm.get('campoEdicion').value,
+          EDITORIAL_ID_editorial: this.idUltimaEditorial,
+          isbn: this.libroForm.get('campoIsbn').value,
+          codigo_identificador: null,
+          NOMENCLATURA_ID_NOMENCLATURA: 1,
+          titulo: this.libroForm.get('campoTitulo').value,
+        };
+        this.librosService.insertarLibro(libro).toPromise().then(l => {
+          if (l.data) {
+            this.librosService.getUltimoLibroAgregado().toPromise().then(ula => {
+              console.log('ULTIMO LIBRO AGREGADO ID', ula.data[0].maxIDlibro);
+              this.idUltimoLibro = ula.data[0].maxIDlibro;
+              const autorLibro = {
+                LIBRO_ID_libro: this.idUltimoLibro,
+                AUTOR_ID_autor: this.idUltimoAutor
+              };
+              this.insertarAutorLibro(autorLibro).then(res => {
+                if (res.data) {
+                  this.idLibro = this.idUltimoLibro;
+                  this.insertarEjemplar();
+                }
+              });
+            });
+          }
+        });
       }
       if (this.existeAutor && !this.existeEditorial) {
         // caso5
