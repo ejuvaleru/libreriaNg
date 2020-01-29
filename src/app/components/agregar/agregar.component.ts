@@ -102,7 +102,7 @@ export class AgregarComponent implements OnInit {
       for (let libroRespuesta of this.libros) {
         if (this.libroForm.get('campoIsbn').value === libroRespuesta.isbn) {
           console.log(this.libroForm.get('campoIsbn').value + ' es igual a ' + libroRespuesta.isbn);
-          this.ID_LIBRO = libroRespuesta.ID_libro;
+          this.idLibro = libroRespuesta.ID_libro;
           this.existeLibro = true;
         }
       }
@@ -127,6 +127,24 @@ export class AgregarComponent implements OnInit {
     if (this.existeLibro) {
       console.log('YA ENTRÉ A SÍ EXISTE LIBRO ');
       // caso2 sí existe libro
+      const hoy = new Date();	
+      console.log('LIBRO ID ', this.idLibro);	
+      const n = Math.random() * (0 - 99999) + 1;	
+      this.ejemplar = {	
+        estado: this.libroForm.get('campoEstado').value,	
+        descripcion: this.libroForm.get('campoDesc').value,	
+        costo_venta: this.libroForm.get('campoCostoVenta').value,	
+        costo_compra: this.libroForm.get('campoCostoCompra').value,	
+        costo_descuento: this.libroForm.get('campoCostoDescuento').value,	
+        url_fotografia: `urldesdeangular${n}`,	
+        fecha_adquisicion: hoy.getDate(),	
+        LIBRO_ID_libro: this.idLibro	
+      };	
+      console.log(this.ejemplar);	
+      this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {	
+        console.log(e);	
+        this.router.navigateByUrl('');	
+      });
 
     } else {// no existe libro
       if (!this.existeAutor && !this.existeEditorial) {
