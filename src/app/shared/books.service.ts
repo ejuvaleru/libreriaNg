@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Country } from './country';
+import { State } from './state';
 
 @Injectable({
   providedIn: 'root'
@@ -80,5 +82,47 @@ export class BooksService {
   insertarEjemplar(ejemplar): Observable<any> {
     console.log(ejemplar);
     return this.http.post(`${this.url}ejemplares/`, ejemplar, { headers: { 'Content-Type': 'application/json' } });
+  }
+
+  // Obtenemos todas las editoriales de la BD
+  getAreas(): Observable<any> {
+    return this.http.get(`${this.url}areas/`);
+  }
+
+  getSubareabyIDarea(id): Observable <any>{
+    return this.http.get(`${this.url}subareas?ID_subarea=${id}`);
+  }
+
+  getTemabyIDsubarea(id): Observable <any>{
+    return this.http.get(`${this.url}temas?ID_tema=${id}`);
+  }
+
+  getSubtemabyIDtema(id): Observable <any>{
+    return this.http.get(`${this.url}subtemas?ID_subtema=${id}`);
+  }
+  
+  getSubsubtemabyIDsubtema(id): Observable <any>{
+    return this.http.get(`${this.url}subsubtemas?ID_subsubtema=${id}`);
+  }
+ 
+
+  //esto es del ejemplo, BORRAR DESPUES!!!!  
+  getCountries() {
+    return [
+     new Country(1, 'USA' ),
+     new Country(2, 'Brazil' ),
+    ];
+  }
+  
+  getStates() {
+   return [
+     new State(1,  'Arizona' ),
+     new State(2,  'Alaska' ),
+     new State(3,  'Florida'),
+     new State(4,  'Hawaii'),
+     new State(5,  'Sao Paulo' ),
+     new State(6,  'Rio de Janeiro'),
+     new State(7,  'Minas Gerais' )
+    ];
   }
 }

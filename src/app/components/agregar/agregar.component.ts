@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { BookapiService } from 'src/app/shared/bookapi.service';
 import { BooksService } from 'src/app/shared/books.service';
+import { Country } from 'src/app/shared/country';
+import { State } from 'src/app/shared/state';
 
 @Component({
   selector: 'app-agregar',
@@ -11,6 +13,16 @@ import { BooksService } from 'src/app/shared/books.service';
   styleUrls: ['./agregar.component.scss']
 })
 export class AgregarComponent implements OnInit {
+
+  selectedCountry: Country = new Country(0, 'Brazil');
+  selectedState:  State = new State (0, 'no deberias ver esto');
+  selectedOpcion3 : State = new State (0, 'vacio');
+  selectedOpcion4 : State = new State (0, 'vacio');
+  countries: Country[];
+  states: State[];
+  opciones3: State[];
+  opciones4: State[];
+  opciones5: State[];
 
   libroForm = this.fb.group({
     campoTitulo: ['', Validators.required],
@@ -38,6 +50,11 @@ export class AgregarComponent implements OnInit {
   cargando = false;
 
   // Arrays que guardan las respuestas obtenidas desde la BD
+  areas = [];
+  subareas = [];
+  temas = [];
+  subtemas = [];
+  subsubtemas = [];
   editoriales = [];
   autores = [];
   libros = [];
@@ -63,6 +80,66 @@ export class AgregarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    //this.countries = this.librosService.getCountries();
+    this.countries = [];
+    //this.onSelect(this.selectedCountry.id);
+    const res = this.librosService.getAreas().toPromise();
+    res.then(async a => {
+      this.areas = await a.data;
+      for (let area of this.areas) {
+        this.countries.push(new Country(area.ID_area, area.nombre_area));
+      }
+      //this.onSelect1(this.selectedCountry.id);
+    });
+  }
+  onSelect1(countryid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.states = [];
+    const res = this.librosService.getSubareabyIDarea(countryid).toPromise();
+    res.then(async sa => {
+      this.subareas = await sa.data;
+      for (let subarea of this.subareas) {
+        this.states.push(new State(subarea.ID_subarea, subarea.nombre_subarea));
+      }
+      this.onSelect2(this.selectedState.id);
+    });
+  }
+  onSelect2(countryid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.opciones3 = [];
+    const res = this.librosService.getTemabyIDsubarea(countryid).toPromise();
+    res.then(async t => {
+      this.temas = await t.data;
+      for (let tema of this.temas) {
+        this.opciones3.push(new State(tema.ID_tema, tema.nombre_tema));
+      }
+      //this.onSelect(this.selectedCountry.id);
+    });
+  }
+  onSelect3(countryid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.opciones4 = [];
+    const res = this.librosService.getSubtemabyIDtema(countryid).toPromise();
+    res.then(async st => {
+      this.subtemas = await st.data;
+      for (let subtema of this.subtemas) {
+        this.opciones4.push(new State(subtema.ID_subtema, subtema.nombre_subtema));
+      }
+      //this.onSelect(this.selectedCountry.id);
+    });
+  }
+
+  onSelect4(countryid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.opciones5 = [];
+    const res = this.librosService.getSubsubtemabyIDsubtema(countryid).toPromise();
+    res.then(async sst => {
+      this.subsubtemas = await sst.data;
+      for (let subsubtema of this.subsubtemas) {
+        this.opciones5.push(new State(subsubtema.ID_subsubtema, subsubtema.nombre_subsubtema));
+      }
+      //this.onSelect(this.selectedCountry.id);
+    });
   }
 
   async getEditoriales() {
@@ -286,11 +363,11 @@ export class AgregarComponent implements OnInit {
         console.log('CASO 5'); //existe autor pero no editorial
         this.insertarEditorial().then(e => {
           console.log('EDITORIAL INSERTADA', e);
-          if(e.data){
+          if (e.data) {
             this.librosService.getUltimaEditorialAgregada().toPromise().then(uea => {
               console.log('ULTIMA EDICION AGREGADA: ', uea.data[0].maxIDeditorial);
               this.idUltimaEditorial = uea.data[0].maxIDeditorial;
-              if(uea){
+              if (uea) {
                 this.idUltimoAutor = this.idUltimoAutor //PORQUE SE LE ASIGNÓ EN EL METODO getAutores
                 const libro = {
                   num_pagina: this.libroForm.get('campoPaginas').value,
