@@ -25,11 +25,11 @@ export class BooksService {
 
   // Método de consulta, ya sea para editar o ver detalles, aquí sustituimos con una query
   obtenerLibroId(id) {
-    return this.http.get(`${this.url}${id}`);
+    return this.http.get(`${this.url}libros/${id}`);
   }
 
   actualizarLibro(id, libro): Observable<any> {
-    return this.http.put(`${this.url}/libros/${id}`, libro, { headers: { 'Content-Type': 'application/json' } });
+    return this.http.put(`${this.url}libros/${id}`, libro, { headers: { 'Content-Type': 'application/json' } });
   }
 
   getUltimoLibroAgregado(): Observable<any> {

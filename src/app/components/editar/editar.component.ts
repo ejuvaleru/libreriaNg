@@ -30,6 +30,7 @@ export class EditarComponent implements OnInit {
     console.log(this.id);
     this.libro = this.bookService.obtenerLibroId(this.id).subscribe(l => {
       this.libro = l;
+      console.log(this.libro);
       this.formulario();
     });
   }
