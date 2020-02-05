@@ -127,6 +127,7 @@ export class AgregarComponent implements OnInit {
     if (this.existeLibro) {
       console.log('YA ENTRÉ A SÍ EXISTE LIBRO ');
       // caso2 sí existe libro
+      this.insertarEjemplar();
 
     } else {// no existe libro
       if (!this.existeAutor && !this.existeEditorial) {
@@ -166,7 +167,9 @@ export class AgregarComponent implements OnInit {
                           };
                           this.insertarAutorLibro(autorLibro).then(res => {
                             if (res.data) {
-                              this.idLibro = this.idUltimoLibro;
+                              if (this.idUltimoLibro !== 0) {
+                                this.idLibro = this.idUltimoLibro;
+                              }
                               this.insertarEjemplar();
                             }
                           });
