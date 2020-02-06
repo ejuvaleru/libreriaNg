@@ -88,19 +88,23 @@ export class BooksService {
   }
 
   getSubareabyIDarea(id): Observable <any>{
-    return this.http.get(`${this.url}subareas?ID_subarea=${id}`);
+    return this.http.get(`${this.url}subareas/byID_area?AREA_ID_area=${id}`);
   }
 
   getTemabyIDsubarea(id): Observable <any>{
-    return this.http.get(`${this.url}temas?ID_tema=${id}`);
+    return this.http.get(`${this.url}temas/byID_subarea?SUBAREA_ID_subarea=${id}`);
   }
 
   getSubtemabyIDtema(id): Observable <any>{
-    return this.http.get(`${this.url}subtemas?ID_subtema=${id}`);
+    return this.http.get(`${this.url}subtemas/byID_tema?TEMA_ID_tema=${id}`);
   }
   
   getSubsubtemabyIDsubtema(id): Observable <any>{
-    return this.http.get(`${this.url}subsubtemas?ID_subsubtema=${id}`);
+    return this.http.get(`${this.url}subsubtemas/byID_subtema?SUBTEMA_ID_subtema=${id}`);
+  }
+
+  getNomenclaturabyIDdatos(areaid,subareaid, temaid, subtemaid, subsubtemaid): Observable <any>{
+    return this.http.get(`${this.url}nomenclaturas/datos?AREA_ID_area=${areaid}&SUBAREA_ID_subarea=${subareaid}&TEMA_ID_tema=${temaid}&SUBTEMA_ID_subtema=${subtemaid}&SUBSUBTEMA_ID_subsubtema=${subsubtemaid}`);
   }
  
 }

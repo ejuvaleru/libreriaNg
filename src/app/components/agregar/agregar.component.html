@@ -140,8 +140,10 @@
 </div>
 <div>
   <label>Subsubtema:</label>
-  <select>
+  <select [(ngModel)]="selectedSubsubtema.id" (change)="onSelect5($event.target.value)">
     <option value="0">--Select--</option>
     <option *ngFor="let opcion of subsubtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
   </select>
 </div>
+
+<label>nomenclatura {{nomen}}</label> 

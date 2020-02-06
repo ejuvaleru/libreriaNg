@@ -6,7 +6,7 @@ import { BookapiService } from 'src/app/shared/bookapi.service';
 import { BooksService } from 'src/app/shared/books.service';
 //import { Country } from 'src/app/shared/country';
 //import { State } from 'src/app/shared/state';
-import {DropDownOption} from 'src/app/shared/dropdownoption';
+import { DropDownOption } from 'src/app/shared/dropdownoption';
 
 @Component({
   selector: 'app-agregar',
@@ -16,15 +16,18 @@ import {DropDownOption} from 'src/app/shared/dropdownoption';
 export class AgregarComponent implements OnInit {
 
   selectedArea: DropDownOption = new DropDownOption(0, 'no tiene');
-  selectedSubarea:  DropDownOption = new DropDownOption (0, 'no tiene');
-  selectedTema : DropDownOption = new DropDownOption (0, 'no tiene');
-  selectedSubtema : DropDownOption = new DropDownOption (0, 'no tiene');
+  selectedSubarea: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedTema: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedSubtema: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedSubsubtema: DropDownOption = new DropDownOption(0, 'no tiene');
 
   areaOpciones: DropDownOption[];
   subareaOpciones: DropDownOption[];
   temaOpciones: DropDownOption[];
   subtemaOpciones: DropDownOption[];
   subsubtemaOpciones: DropDownOption[];
+
+  nomen = '...';
 
   libroForm = this.fb.group({
     campoTitulo: ['', Validators.required],
@@ -57,6 +60,7 @@ export class AgregarComponent implements OnInit {
   temas = [];
   subtemas = [];
   subsubtemas = [];
+  nomenclaturas = [];
   editoriales = [];
   autores = [];
   libros = [];
@@ -94,10 +98,10 @@ export class AgregarComponent implements OnInit {
       //this.onSelect1(this.selectedCountry.id);
     });
   }
-  onSelect1(countryid) {
+  onSelect1(areaid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
     this.subareaOpciones = [];
-    const res = this.librosService.getSubareabyIDarea(countryid).toPromise();
+    const res = this.librosService.getSubareabyIDarea(areaid).toPromise();
     res.then(async sa => {
       this.subareas = await sa.data;
       for (let subarea of this.subareas) {
@@ -106,10 +110,10 @@ export class AgregarComponent implements OnInit {
       //this.onSelect2(this.selectedSubarea.id);
     });
   }
-  onSelect2(countryid) {
+  onSelect2(subareaid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
     this.temaOpciones = [];
-    const res = this.librosService.getTemabyIDsubarea(countryid).toPromise();
+    const res = this.librosService.getTemabyIDsubarea(subareaid).toPromise();
     res.then(async t => {
       this.temas = await t.data;
       for (let tema of this.temas) {
@@ -118,10 +122,10 @@ export class AgregarComponent implements OnInit {
       //this.onSelect(this.selectedCountry.id);
     });
   }
-  onSelect3(countryid) {
+  onSelect3(temaid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
     this.subtemaOpciones = [];
-    const res = this.librosService.getSubtemabyIDtema(countryid).toPromise();
+    const res = this.librosService.getSubtemabyIDtema(temaid).toPromise();
     res.then(async st => {
       this.subtemas = await st.data;
       for (let subtema of this.subtemas) {
@@ -131,16 +135,23 @@ export class AgregarComponent implements OnInit {
     });
   }
 
-  onSelect4(countryid) {
+  onSelect4(subtemaid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
     this.subsubtemaOpciones = [];
-    const res = this.librosService.getSubsubtemabyIDsubtema(countryid).toPromise();
+    const res = this.librosService.getSubsubtemabyIDsubtema(subtemaid).toPromise();
     res.then(async sst => {
       this.subsubtemas = await sst.data;
       for (let subsubtema of this.subsubtemas) {
         this.subsubtemaOpciones.push(new DropDownOption(subsubtema.ID_subsubtema, subsubtema.nombre_subsubtema));
       }
-      //this.onSelect(this.selectedCountry.id);
+    });
+  }
+  onSelect5() {
+    console.log(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id);
+    const res2 = this.librosService.getNomenclaturabyIDdatos(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id).toPromise();
+    res2.then(async n => {
+      this.nomenclaturas = await n.data;
+      this.nomen = this.nomenclaturas[0].abreviacion;
     });
   }
 
