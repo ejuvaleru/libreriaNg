@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 
 import { BookapiService } from 'src/app/shared/bookapi.service';
 import { BooksService } from 'src/app/shared/books.service';
-import { Country } from 'src/app/shared/country';
-import { State } from 'src/app/shared/state';
+//import { Country } from 'src/app/shared/country';
+//import { State } from 'src/app/shared/state';
+import {DropDownOption} from 'src/app/shared/dropdownoption';
 
 @Component({
   selector: 'app-agregar',
@@ -14,15 +15,16 @@ import { State } from 'src/app/shared/state';
 })
 export class AgregarComponent implements OnInit {
 
-  selectedCountry: Country = new Country(0, 'Brazil');
-  selectedState:  State = new State (0, 'no deberias ver esto');
-  selectedOpcion3 : State = new State (0, 'vacio');
-  selectedOpcion4 : State = new State (0, 'vacio');
-  countries: Country[];
-  states: State[];
-  opciones3: State[];
-  opciones4: State[];
-  opciones5: State[];
+  selectedArea: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedSubarea:  DropDownOption = new DropDownOption (0, 'no tiene');
+  selectedTema : DropDownOption = new DropDownOption (0, 'no tiene');
+  selectedSubtema : DropDownOption = new DropDownOption (0, 'no tiene');
+
+  areaOpciones: DropDownOption[];
+  subareaOpciones: DropDownOption[];
+  temaOpciones: DropDownOption[];
+  subtemaOpciones: DropDownOption[];
+  subsubtemaOpciones: DropDownOption[];
 
   libroForm = this.fb.group({
     campoTitulo: ['', Validators.required],
@@ -81,49 +83,49 @@ export class AgregarComponent implements OnInit {
 
   ngOnInit() {
     //this.countries = this.librosService.getCountries();
-    this.countries = [];
+    this.areaOpciones = [];
     //this.onSelect(this.selectedCountry.id);
     const res = this.librosService.getAreas().toPromise();
     res.then(async a => {
       this.areas = await a.data;
       for (let area of this.areas) {
-        this.countries.push(new Country(area.ID_area, area.nombre_area));
+        this.areaOpciones.push(new DropDownOption(area.ID_area, area.nombre_area));
       }
       //this.onSelect1(this.selectedCountry.id);
     });
   }
   onSelect1(countryid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
-    this.states = [];
+    this.subareaOpciones = [];
     const res = this.librosService.getSubareabyIDarea(countryid).toPromise();
     res.then(async sa => {
       this.subareas = await sa.data;
       for (let subarea of this.subareas) {
-        this.states.push(new State(subarea.ID_subarea, subarea.nombre_subarea));
+        this.subareaOpciones.push(new DropDownOption(subarea.ID_subarea, subarea.nombre_subarea));
       }
-      this.onSelect2(this.selectedState.id);
+      //this.onSelect2(this.selectedSubarea.id);
     });
   }
   onSelect2(countryid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
-    this.opciones3 = [];
+    this.temaOpciones = [];
     const res = this.librosService.getTemabyIDsubarea(countryid).toPromise();
     res.then(async t => {
       this.temas = await t.data;
       for (let tema of this.temas) {
-        this.opciones3.push(new State(tema.ID_tema, tema.nombre_tema));
+        this.temaOpciones.push(new DropDownOption(tema.ID_tema, tema.nombre_tema));
       }
       //this.onSelect(this.selectedCountry.id);
     });
   }
   onSelect3(countryid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
-    this.opciones4 = [];
+    this.subtemaOpciones = [];
     const res = this.librosService.getSubtemabyIDtema(countryid).toPromise();
     res.then(async st => {
       this.subtemas = await st.data;
       for (let subtema of this.subtemas) {
-        this.opciones4.push(new State(subtema.ID_subtema, subtema.nombre_subtema));
+        this.subtemaOpciones.push(new DropDownOption(subtema.ID_subtema, subtema.nombre_subtema));
       }
       //this.onSelect(this.selectedCountry.id);
     });
@@ -131,12 +133,12 @@ export class AgregarComponent implements OnInit {
 
   onSelect4(countryid) {
     //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
-    this.opciones5 = [];
+    this.subsubtemaOpciones = [];
     const res = this.librosService.getSubsubtemabyIDsubtema(countryid).toPromise();
     res.then(async sst => {
       this.subsubtemas = await sst.data;
       for (let subsubtema of this.subsubtemas) {
-        this.opciones5.push(new State(subsubtema.ID_subsubtema, subsubtema.nombre_subsubtema));
+        this.subsubtemaOpciones.push(new DropDownOption(subsubtema.ID_subsubtema, subsubtema.nombre_subsubtema));
       }
       //this.onSelect(this.selectedCountry.id);
     });

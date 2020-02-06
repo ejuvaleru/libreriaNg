@@ -106,18 +106,18 @@
 </div>
 <!--ejemplo de https://stackblitz.com/edit/cascading-dropdown-angular?file=app%2Fapp.module.ts-->
 <label>Area:</label>
-<select [(ngModel)]="selectedCountry.id" (change)="onSelect1($event.target.value)">
+<select [(ngModel)]="selectedArea.id" (change)="onSelect1($event.target.value)">
   <option value="0">--Select--</option>
-  <option *ngFor="let country of countries" value={{country.id}}>{{country.name}}</option>
+  <option *ngFor="let opcion of areaOpciones" value={{opcion.id}}>{{opcion.name}}</option>
 </select>
 
 <br /><br />
 
 <div>
   <label>Subarea:</label>
-  <select [(ngModel)]="selectedState.id" (change)="onSelect2($event.target.value)">
+  <select [(ngModel)]="selectedSubarea.id" (change)="onSelect2($event.target.value)">
     <option value="0">--Select--</option>
-    <option *ngFor="let state of states " value={{state.id}}>{{state.name}}</option>
+    <option *ngFor="let opcion of subareaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
   </select>
 </div>
 
@@ -125,23 +125,23 @@
 
 <div>
   <label>Tema:</label>
-  <select [(ngModel)]="selectedOpcion3.id" (change)="onSelect3($event.target.value)">
+  <select [(ngModel)]="selectedTema.id" (change)="onSelect3($event.target.value)">
     <option value="0">--Select--</option>
-    <option *ngFor="let opcion of opciones3 " value={{opcion.id}}>{{opcion.name}}</option>
+    <option *ngFor="let opcion of temaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
   </select>
 </div>
 
 <div>
   <label>Subtema:</label>
-  <select [(ngModel)]="selectedOpcion4.id" (change)="onSelect4($event.target.value)">
+  <select [(ngModel)]="selectedSubtema.id" (change)="onSelect4($event.target.value)">
     <option value="0">--Select--</option>
-    <option *ngFor="let opcion of opciones4 " value={{opcion.id}}>{{opcion.name}}</option>
+    <option *ngFor="let opcion of subtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
   </select>
 </div>
 <div>
   <label>Subsubtema:</label>
   <select>
     <option value="0">--Select--</option>
-    <option *ngFor="let opcion of opciones5 " value={{opcion.id}}>{{opcion.name}}</option>
+    <option *ngFor="let opcion of subsubtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
   </select>
 </div>
