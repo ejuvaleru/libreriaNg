@@ -108,6 +108,7 @@ export class AgregarComponent implements OnInit {
         this.subareaOpciones.push(new DropDownOption(subarea.ID_subarea, subarea.nombre_subarea));
       }
       //this.onSelect2(this.selectedSubarea.id);
+      this.onSelect5();
     });
   }
   onSelect2(subareaid) {
@@ -120,6 +121,7 @@ export class AgregarComponent implements OnInit {
         this.temaOpciones.push(new DropDownOption(tema.ID_tema, tema.nombre_tema));
       }
       //this.onSelect(this.selectedCountry.id);
+      this.onSelect5();
     });
   }
   onSelect3(temaid) {
@@ -132,6 +134,7 @@ export class AgregarComponent implements OnInit {
         this.subtemaOpciones.push(new DropDownOption(subtema.ID_subtema, subtema.nombre_subtema));
       }
       //this.onSelect(this.selectedCountry.id);
+      this.onSelect5();
     });
   }
 
@@ -144,14 +147,22 @@ export class AgregarComponent implements OnInit {
       for (let subsubtema of this.subsubtemas) {
         this.subsubtemaOpciones.push(new DropDownOption(subsubtema.ID_subsubtema, subsubtema.nombre_subsubtema));
       }
+      this.onSelect5();
     });
   }
   onSelect5() {
-    console.log(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id);
+    //console.log(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id);
     const res2 = this.librosService.getNomenclaturabyIDdatos(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id).toPromise();
     res2.then(async n => {
+      //console.log(n);
       this.nomenclaturas = await n.data;
-      this.nomen = this.nomenclaturas[0].abreviacion;
+      if (this.nomenclaturas[0] === undefined) {
+        console.log('no hay tal nomenclatura');
+      } else {
+        console.log('existe nomenclatura');
+        //this.nomenclaturas = await n.data;
+        this.nomen = this.nomenclaturas[0].abreviacion;
+      }
     });
   }
 
