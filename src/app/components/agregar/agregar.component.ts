@@ -267,7 +267,9 @@ export class AgregarComponent implements OnInit {
                           };
                           this.insertarAutorLibro(autorLibro).then(res => {
                             if (res.data) {
-                              this.idLibro = this.idUltimoLibro;
+                              if (this.idUltimoLibro !== 0) {
+                                this.idLibro = this.idUltimoLibro;
+                              }
                               this.insertarEjemplar();
                             }
                           });
