@@ -12,7 +12,8 @@
           <input class="form-control" type="text" id="campo-autor" formControlName="campoAutor" placeholder="Autor">
         </div>
         <div class="form-group">
-          <input class="form-control" type="text" id="campo-editorial" formControlName="campoEditorial" placeholder="Editorial">
+          <input class="form-control" type="text" id="campo-editorial" formControlName="campoEditorial"
+            placeholder="Editorial">
         </div>
         <div class="form-group">
           <input class="form-control" type="text" id="campo-isbn" formControlName="campoIsbn" placeholder="ISBN"
@@ -103,3 +104,46 @@
     </div>
   </div>
 </div>
+<!--ejemplo de https://stackblitz.com/edit/cascading-dropdown-angular?file=app%2Fapp.module.ts-->
+<label>Area:</label>
+<select [(ngModel)]="selectedArea.id" (change)="onSelect1($event.target.value)">
+  <option value="0">--Select--</option>
+  <option *ngFor="let opcion of areaOpciones" value={{opcion.id}}>{{opcion.name}}</option>
+</select>
+
+<br /><br />
+
+<div>
+  <label>Subarea:</label>
+  <select [(ngModel)]="selectedSubarea.id" (change)="onSelect2($event.target.value)">
+    <option value="0">--Select--</option>
+    <option *ngFor="let opcion of subareaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+  </select>
+</div>
+
+
+
+<div>
+  <label>Tema:</label>
+  <select [(ngModel)]="selectedTema.id" (change)="onSelect3($event.target.value)">
+    <option value="0">--Select--</option>
+    <option *ngFor="let opcion of temaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+  </select>
+</div>
+
+<div>
+  <label>Subtema:</label>
+  <select [(ngModel)]="selectedSubtema.id" (change)="onSelect4($event.target.value)">
+    <option value="0">--Select--</option>
+    <option *ngFor="let opcion of subtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+  </select>
+</div>
+<div>
+  <label>Subsubtema:</label>
+  <select [(ngModel)]="selectedSubsubtema.id" (change)="onSelect5($event.target.value)">
+    <option value="0">--Select--</option>
+    <option *ngFor="let opcion of subsubtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+  </select>
+</div>
+
+<label>nomenclatura {{nomen}}</label> 

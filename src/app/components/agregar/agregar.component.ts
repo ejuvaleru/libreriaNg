@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 
 import { BookapiService } from 'src/app/shared/bookapi.service';
 import { BooksService } from 'src/app/shared/books.service';
+//import { Country } from 'src/app/shared/country';
+//import { State } from 'src/app/shared/state';
+import { DropDownOption } from 'src/app/shared/dropdownoption';
 
 @Component({
   selector: 'app-agregar',
@@ -11,6 +14,20 @@ import { BooksService } from 'src/app/shared/books.service';
   styleUrls: ['./agregar.component.scss']
 })
 export class AgregarComponent implements OnInit {
+
+  selectedArea: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedSubarea: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedTema: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedSubtema: DropDownOption = new DropDownOption(0, 'no tiene');
+  selectedSubsubtema: DropDownOption = new DropDownOption(0, 'no tiene');
+
+  areaOpciones: DropDownOption[];
+  subareaOpciones: DropDownOption[];
+  temaOpciones: DropDownOption[];
+  subtemaOpciones: DropDownOption[];
+  subsubtemaOpciones: DropDownOption[];
+
+  nomen = '...';
 
   libroForm = this.fb.group({
     campoTitulo: ['', Validators.required],
@@ -38,6 +55,12 @@ export class AgregarComponent implements OnInit {
   cargando = false;
 
   // Arrays que guardan las respuestas obtenidas desde la BD
+  areas = [];
+  subareas = [];
+  temas = [];
+  subtemas = [];
+  subsubtemas = [];
+  nomenclaturas = [];
   editoriales = [];
   autores = [];
   libros = [];
@@ -63,6 +86,84 @@ export class AgregarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    //this.countries = this.librosService.getCountries();
+    this.areaOpciones = [];
+    //this.onSelect(this.selectedCountry.id);
+    const res = this.librosService.getAreas().toPromise();
+    res.then(async a => {
+      this.areas = await a.data;
+      for (let area of this.areas) {
+        this.areaOpciones.push(new DropDownOption(area.ID_area, area.nombre_area));
+      }
+      //this.onSelect1(this.selectedCountry.id);
+    });
+  }
+  onSelect1(areaid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.subareaOpciones = [];
+    const res = this.librosService.getSubareabyIDarea(areaid).toPromise();
+    res.then(async sa => {
+      this.subareas = await sa.data;
+      for (let subarea of this.subareas) {
+        this.subareaOpciones.push(new DropDownOption(subarea.ID_subarea, subarea.nombre_subarea));
+      }
+      //this.onSelect2(this.selectedSubarea.id);
+      this.onSelect5();
+    });
+  }
+  onSelect2(subareaid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.temaOpciones = [];
+    const res = this.librosService.getTemabyIDsubarea(subareaid).toPromise();
+    res.then(async t => {
+      this.temas = await t.data;
+      for (let tema of this.temas) {
+        this.temaOpciones.push(new DropDownOption(tema.ID_tema, tema.nombre_tema));
+      }
+      //this.onSelect(this.selectedCountry.id);
+      this.onSelect5();
+    });
+  }
+  onSelect3(temaid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.subtemaOpciones = [];
+    const res = this.librosService.getSubtemabyIDtema(temaid).toPromise();
+    res.then(async st => {
+      this.subtemas = await st.data;
+      for (let subtema of this.subtemas) {
+        this.subtemaOpciones.push(new DropDownOption(subtema.ID_subtema, subtema.nombre_subtema));
+      }
+      //this.onSelect(this.selectedCountry.id);
+      this.onSelect5();
+    });
+  }
+
+  onSelect4(subtemaid) {
+    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    this.subsubtemaOpciones = [];
+    const res = this.librosService.getSubsubtemabyIDsubtema(subtemaid).toPromise();
+    res.then(async sst => {
+      this.subsubtemas = await sst.data;
+      for (let subsubtema of this.subsubtemas) {
+        this.subsubtemaOpciones.push(new DropDownOption(subsubtema.ID_subsubtema, subsubtema.nombre_subsubtema));
+      }
+      this.onSelect5();
+    });
+  }
+  onSelect5() {
+    //console.log(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id);
+    const res2 = this.librosService.getNomenclaturabyIDdatos(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id).toPromise();
+    res2.then(async n => {
+      //console.log(n);
+      this.nomenclaturas = await n.data;
+      if (this.nomenclaturas[0] === undefined) {
+        console.log('no hay tal nomenclatura');
+      } else {
+        console.log('existe nomenclatura');
+        //this.nomenclaturas = await n.data;
+        this.nomen = this.nomenclaturas[0].abreviacion;
+      }
+    });
   }
 
   async getEditoriales() {
