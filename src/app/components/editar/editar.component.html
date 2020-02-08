@@ -1,8 +1,8 @@
 <div class="container mt-4">
-  <a class="btn btn-primary" routerLink="/" routerLinkActive="router-link-active">Volver</a>
+  <a class="btn btn-primary" routerLink="/libros" routerLinkActive="router-link-active">Volver</a>
   <h2>{{libro?.titulo}}</h2>
   <h3>{{libro?.isbn}}</h3>
-  <form *ngIf="libro" [formGroup]="formEditarLibro" (ngSubmit)="onSubmit()">
+  <form *ngIf="formEditarLibro" [formGroup]="formEditarLibro" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <input class="form-control" type="text" id="campo-titulo" placeholder="Título" formControlName="campoTitulo"
         autofocus>

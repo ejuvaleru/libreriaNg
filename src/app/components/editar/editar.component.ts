@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BooksService } from 'src/app/shared/books.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -31,7 +31,9 @@ export class EditarComponent implements OnInit {
     this.libro = this.bookService.obtenerLibroId(this.id).subscribe(l => {
       this.libro = l;
       console.log(this.libro);
-      this.formulario();
+      if (l) {
+        this.formulario();
+      }
     });
   }
 

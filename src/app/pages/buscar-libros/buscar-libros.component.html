@@ -1,0 +1,40 @@
+<div class="container mt-2">
+
+  <!-- INICIA FILA -->
+  <div class="row">
+
+    <!-- INICIA BOTÓN VOLVER, CAMPO DE BÚSQUEDA Y BOTÓN BUSCAR -->
+    <div class="col-1">
+      <a class="btn btn-secondary" routerLink="/libros"><i class="fa fa-arrow-left fa-lg"></i> Volver</a>
+    </div>
+    <div class="col-9 ml-4">
+      <input class="form-control" type="search" placeholder="Buscar..." aria-label="Buscar" [(ngModel)]="valorBusqueda">
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-info" (click)="buscar()"><i class="fa fa-search fa-lg"></i>Buscar</button>
+    </div>
+    <!-- FIN BOTÓN VOLVER, CAMPO DE BÚSQUEDA Y BOTÓN BUSCAR -->
+
+    <div class="col-12 mt-2">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1" [checked]="isPorAutor" #checkAutor>
+        <label class="form-check-label" for="exampleCheck1">Autor</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1" [checked]="isPorTitutlo" #checkTitulo>
+        <label class="form-check-label" for="exampleCheck1">Título</label>
+      </div>
+    </div>
+  </div>
+  <!-- TERMINA FILA -->
+
+  <!-- INICIA RESULTADOS DE BÚSQUEDA -->
+  <div class="container mt-4">
+    <h3>Resultados de la búsqueda aquí... cuando los haya claro :p</h3>
+    <p>Mensaje de error: {{mensajeError}}</p>
+    <p>Buscando por autor: {{isPorAutor}}</p>
+    <p>Buscando por titulo: {{isPorTitulo}}</p>
+  </div>
+  <!-- TERMINA RESULTADOS DE BÚSQUEDA -->
+
+</div>

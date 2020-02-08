@@ -13,20 +13,24 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AgregarComponent } from './components/agregar/agregar.component';
 import { EditarComponent } from './components/editar/editar.component';
+import { LibrosComponent } from './pages/libros/libros.component';
+import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     AgregarComponent,
-    EditarComponent
+    EditarComponent,
+    LibrosComponent,
+    BuscarLibrosComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

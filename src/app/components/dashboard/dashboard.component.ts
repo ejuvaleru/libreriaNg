@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { BooksService } from 'src/app/shared/books.service';
 
 @Component({
@@ -8,23 +8,13 @@ import { BooksService } from 'src/app/shared/books.service';
 })
 export class DashboardComponent implements OnInit {
 
-  // Aquí asignamos la data que recibimos del service 'BooksService'
-  libros = [];
 
-  constructor(
-    private libroService: BooksService
-  ) { }
+  hoy: Date;
+
+  constructor() { }
 
   ngOnInit() {
-    this.libroService.getLibros().subscribe(l => {
-      this.libros = l.data;
-      console.log(this.libros);
-    });
+    this.hoy = new Date();
   }
-
-  eliminarLibro(i) {
-    this.libroService.eliminar(i);
-  }
-
 
 }
