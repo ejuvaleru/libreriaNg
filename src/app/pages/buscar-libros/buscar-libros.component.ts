@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import Fuse from 'fuse.js';
+import { BookapiService } from 'src/app/shared/bookapi.service';
+import { BooksService } from 'src/app/shared/books.service';
 
 @Component({
   selector: 'app-buscar-libros',
@@ -6,6 +9,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./buscar-libros.component.scss']
 })
 export class BuscarLibrosComponent implements OnInit {
+    // Arrays que guardan las respuestas obtenidas desde la BD
+    libros = [];
 
   isPorAutor = false;
   isPorTitulo = false;
@@ -16,7 +21,10 @@ export class BuscarLibrosComponent implements OnInit {
   valorBusqueda = '';
   mensajeError = '';
 
-  constructor() { }
+  constructor(    
+    private librosService: BooksService
+    ) {
+   }
 
   ngOnInit() { }
 
@@ -49,6 +57,7 @@ export class BuscarLibrosComponent implements OnInit {
       console.log('EN EL IF POR TITULO: ', this.isPorTitulo);
 
       console.log(this.valorBusqueda); // De esta manera accedemos al valor del campo
+      this.usarFuse(this.valorBusqueda);
     } else {
       // Con esto asignamos a falso o unchecked los campos en caso de que se deseleccionen
       this.isPorAutor = this.checkAutor.nativeElement.checked;
@@ -60,4 +69,55 @@ export class BuscarLibrosComponent implements OnInit {
     console.log('POR TITULO? ', this.isPorTitulo);
   }
 
+  usarFuse(valorBusqueda) {
+    type SimpleBookFuse = { //descripcion del objeto para busqueda en fusejs
+      titulo: string;
+      author: {
+        firstName: string;
+        lastName: string;
+      };
+      tags: string[]
+    };
+    var books: SimpleBookFuse[] = [{ //libros de ejemplo 
+      'titulo': "Old Man's War",
+      'author': {
+        'firstName': 'John',
+        'lastName': 'Scalzi'
+      },
+      'tags': ['fiction']
+    }, {
+      'titulo': 'The Lock Artist',
+      'author': {
+        'firstName': 'Steve',
+        'lastName': 'Hamilton'
+      },
+      'tags': ['thriller']
+    }]
+    console.log("hola fuse");
+    const res = this.librosService.getLibros().toPromise();
+    res.then(async l => {
+      this.libros = await l.data;
+      for (let libro of this.libros) {
+        books.push({
+          'titulo': libro.titulo,
+          'author': {
+            'firstName': 'nombre ejemplo',
+            'lastName': 'apellido ejemplo'
+          },
+          'tags': ['tag ejemplo']
+        });
+      }
+      const options: Fuse.FuseOptions<SimpleBookFuse> = {
+        keys: ['titulo'],         //keys: ['titulo', 'author'], //puede buscar por mas de un campo
+        caseSensitive: false,
+        threshold: .5,   //muy importe, rango de 0 <= theshold <= 1   // 0 require un match perfecto y 1 hará match con lo que sea
+        shouldSort: true,
+      };
+      const fuse = new Fuse(books, options)
+      const results = fuse.search(valorBusqueda)
+      console.log(results);
+      this.libros = [];
+      this.libros = results
+    });
+  }
 }
