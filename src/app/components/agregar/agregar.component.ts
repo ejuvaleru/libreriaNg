@@ -139,7 +139,7 @@ export class AgregarComponent implements OnInit {
   }
 
   onSelect4(subtemaid) {
-    //this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
+    // this.states = this.librosService.getStates().filter((item) => item.countryid == countryid);
     this.subsubtemaOpciones = [];
     const res = this.librosService.getSubsubtemabyIDsubtema(subtemaid).toPromise();
     res.then(async sst => {
@@ -151,16 +151,18 @@ export class AgregarComponent implements OnInit {
     });
   }
   onSelect5() {
-    //console.log(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id);
+    // tslint:disable-next-line:max-line-length
+    // console.log(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id);
+    // tslint:disable-next-line:max-line-length
     const res2 = this.librosService.getNomenclaturabyIDdatos(this.selectedArea.id, this.selectedSubarea.id, this.selectedTema.id, this.selectedSubtema.id, this.selectedSubsubtema.id).toPromise();
     res2.then(async n => {
-      //console.log(n);
+      // console.log(n);
       this.nomenclaturas = await n.data;
       if (this.nomenclaturas[0] === undefined) {
         console.log('no hay tal nomenclatura');
       } else {
         console.log('existe nomenclatura');
-        //this.nomenclaturas = await n.data;
+        // this.nomenclaturas = await n.data;
         this.nomen = this.nomenclaturas[0].abreviacion;
       }
     });
@@ -175,7 +177,7 @@ export class AgregarComponent implements OnInit {
       for (let editorial of this.editoriales) {
         if (this.libroForm.get('campoEditorial').value === editorial.nombre_editorial) {
           console.log(this.libroForm.get('campoEditorial').value + ' es igual a ' + editorial.nombre_editorial);
-          this.editorial = editorial.nombre_editorial;//PARA YA NO VOLVER A CONSULTAR EN LOS CASOS
+          this.editorial = editorial.nombre_editorial;// PARA YA NO VOLVER A CONSULTAR EN LOS CASOS
           this.idUltimaEditorial = editorial.ID_editorial;
           return this.existeEditorial = true;
         }
@@ -192,7 +194,7 @@ export class AgregarComponent implements OnInit {
       for (let autor of this.autores) {
         if (this.libroForm.get('campoAutor').value === autor.nombre_autor) {
           console.log(this.libroForm.get('campoAutor').value + ' es igual a ' + autor.nombre_autor);
-          this.autor = autor.nombre_autor;//PARA YA NO VOLVER A CONSULTAR EN LOS CASOS
+          this.autor = autor.nombre_autor; // PARA YA NO VOLVER A CONSULTAR EN LOS CASOS
           this.idUltimoAutor = autor.ID_autor;
           return this.existeAutor = true;
         }

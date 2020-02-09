@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BooksService } from 'src/app/shared/books.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-editar',
@@ -18,6 +19,7 @@ export class EditarComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private location: Location,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private bookService: BooksService,
@@ -52,9 +54,13 @@ export class EditarComponent implements OnInit {
     this.bookService.actualizarLibro(this.id, this.libro).subscribe(res => {
       console.log('RES', res);
       if (res.message === 'Libro actualizado correctamente') {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/libros');
       }
     });
+  }
+
+  volver() {
+    this.location.back();
   }
 
 }

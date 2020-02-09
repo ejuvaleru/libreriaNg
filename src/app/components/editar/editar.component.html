@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <a class="btn btn-primary" routerLink="/libros" routerLinkActive="router-link-active">Volver</a>
+  <a class="btn btn-primary" (click)="volver()" routerLinkActive="router-link-active">Volver</a>
   <h2>{{libro?.titulo}}</h2>
   <h3>{{libro?.isbn}}</h3>
   <form *ngIf="formEditarLibro" [formGroup]="formEditarLibro" (ngSubmit)="onSubmit()">

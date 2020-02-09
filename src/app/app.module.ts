@@ -15,6 +15,7 @@ import { AgregarComponent } from './components/agregar/agregar.component';
 import { EditarComponent } from './components/editar/editar.component';
 import { LibrosComponent } from './pages/libros/libros.component';
 import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros.component';
+import { EjemplaresComponent } from './pages/ejemplares/ejemplares.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros.compo
     AgregarComponent,
     EditarComponent,
     LibrosComponent,
-    BuscarLibrosComponent
+    BuscarLibrosComponent,
+    EjemplaresComponent
   ],
   imports: [
     BrowserModule,

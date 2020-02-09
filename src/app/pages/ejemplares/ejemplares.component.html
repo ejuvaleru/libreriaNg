@@ -1,0 +1,28 @@
+<div class="container mt-4" *ngIf="!isCargando">
+  <a class="btn btn-primary" (click)="volver()" routerLinkActive="router-link-active">Volver</a>
+  <h2>Ejemplares del libro: {{tituloLibro}}</h2>
+
+  <div class="container p-4" *ngIf="ejemplares?.length > 0">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Estado</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Costo de venta</th>
+          <th scope="col">Costo con descuento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of ejemplares; let i = index">
+          <td>{{item.estado}}</td>
+          <td>{{item.descripcion}}</td>
+          <td>{{item.costo_venta}}</td>
+          <td>{{item.costo_descuento}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="!existenEjemplares">
+    <h3>¡No hay ejemplares!</h3>
+  </div>
+</div>

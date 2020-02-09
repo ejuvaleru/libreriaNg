@@ -15,10 +15,7 @@ export class BooksService {
   ) { }
 
   // TODO: más adelante aquí podríamos implementar los modelos definidos
-  // Arreglo de libros o ejemplares
-  // Método para agregar, aquí sustituimos con una query
   insertarLibro(libro): Observable<any> {
-
     console.log(libro);
     return this.http.post(`${this.url}libros/`, libro, { headers: { 'Content-Type': 'application/json' } });
   }
@@ -38,6 +35,10 @@ export class BooksService {
   // Método para eliminar, aquí sustituimos con una query
   eliminar(id) {
 
+  }
+
+  getEjemplaresPorLibroId(id): Observable<any> {
+    return this.http.get(`${this.url}ejemplares/${id}/libro`);
   }
 
   // Obtenemos todos los libros de la base de datos
@@ -76,7 +77,6 @@ export class BooksService {
   getUltimoAutorAgregado(): Observable<any> {
     return this.http.get(`${this.url}autores/max/max`);
   }
-
 
   insertarEjemplar(ejemplar): Observable<any> {
     console.log(ejemplar);

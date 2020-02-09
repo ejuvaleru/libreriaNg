@@ -8,7 +8,12 @@
         libro</a>
     </div>
     <div class="col-auto">
-      <a *ngIf="libros?.length > 0" class="btn btn-info" routerLink="/buscar-libros"><i class="fa fa-search fa-lg"></i> Buscar libro</a>
+      <a *ngIf="libros" class="btn btn-info" (click)="cargar()"><i class="fa fa-refresh fa-lg"></i>
+        Recargar</a>
+    </div>
+    <div class="col-auto">
+      <a *ngIf="libros?.length > 0" class="btn btn-info" routerLink="buscar-libros"><i class="fa fa-search fa-lg"></i>
+        Buscar libro</a>
     </div>
   </div>
   <div class="container p-4" *ngIf="libros?.length === 0">
@@ -21,20 +26,28 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Título</th>
-          <th scope="col">ISBN</th>
-          <th scope="col">Acciones</th>
+          <th class="text-center" scope="col">ID</th>
+          <th class="text-center" scope="col">Título</th>
+          <th class="text-center" scope="col">ISBN</th>
+          <th class="text-center" scope="col">No. Ejemplares</th>
+          <th class="text-center" scope="col">Edición</th>
+          <th class="text-center" scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of libros; let i = index">
-          <td>{{item.ID_libro}}</td>
-          <td>{{item.titulo}}</td>
-          <td>{{item.isbn}}</td>
-          <td>
-            <a class="btn btn-secondary" routerLink="/editar/{{item.ID_libro}}" routerLinkActive="router-link-active">
+          <td class="text-center">{{item.a.ID_libro}}</td>
+          <td class="text-center">{{item.a.titulo}}</td>
+          <td class="text-center">{{item.a.isbn}}</td>
+          <td class="text-center">{{item.a.num_edicion}}</td>
+          <td class="text-center">{{item.cEjemplares}}</td>
+          <td class="text-center">
+            <a class="btn btn-secondary" routerLink="editar/{{item.a.ID_libro}}" routerLinkActive="router-link-active">
               <i class="fa fa-edit fa-lg"></i> Editar
+            </a>
+            <a class="btn btn-light ml-2" routerLink="ejemplares/{{item.a.ID_libro}}"
+              routerLinkActive="router-link-active">
+              <i class="fa fa-book fa-lg"></i> Ejemplares
             </a>
           </td>
         </tr>

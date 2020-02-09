@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import Fuse from 'fuse.js';
 import { BookapiService } from 'src/app/shared/bookapi.service';
 import { BooksService } from 'src/app/shared/books.service';
+import { SimpleBookFuse } from 'src/app/interfaces/simplebook.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buscar-libros',
@@ -9,11 +11,11 @@ import { BooksService } from 'src/app/shared/books.service';
   styleUrls: ['./buscar-libros.component.scss']
 })
 export class BuscarLibrosComponent implements OnInit {
-    // Arrays que guardan las respuestas obtenidas desde la BD
-    libros = [];
+  // Arrays que guardan las respuestas obtenidas desde la BD
+  libros = [];
 
-  isPorAutor = false;
-  isPorTitulo = false;
+  isPorAutor: boolean;
+  isPorTitulo: boolean;
 
   @ViewChild('checkAutor') checkAutor: ElementRef; // Así accedemos al DOM
   @ViewChild('checkTitulo') checkTitulo: ElementRef;
@@ -21,26 +23,32 @@ export class BuscarLibrosComponent implements OnInit {
   valorBusqueda = '';
   mensajeError = '';
 
-  constructor(    
-    private librosService: BooksService
-    ) {
-   }
+  constructor(
+    private librosService: BooksService,
+    private router: Router
+  ) {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log('INIT');
+    this.valorBusqueda = localStorage.getItem('busqueda'); // Obtenemos el valor del localStorage
+    this.isPorAutor = JSON.parse(localStorage.getItem('checkedA'));
+    this.isPorTitulo = JSON.parse(localStorage.getItem('checkedT'));
+  }
 
   buscar() {
     if (this.valorBusqueda === '') { // Previene que el campo se quede vacío
-      this.mensajeError = 'No debe estar el campo vacío';
+      this.mensajeError = 'El campo de búsqueda no debe estar vacío.';
       return console.log('Ingresa algo ');
     }
     // tslint:disable-next-line:max-line-length
     if (this.checkAutor.nativeElement.checked && this.checkTitulo.nativeElement.checked) { // Previene que seleccionen los dos check a la vez
-      this.mensajeError = 'SÓLO PUEDES BUSCAR POR UN CAMPO A LA VEZ';
+      this.mensajeError = 'Solo puede seleccionar una opción a la vez.';
       return console.log('SÓLO PUEDES BUSCAR POR UN CAMPO A LA VEZ');
     }
     // tslint:disable-next-line:max-line-length
     if (!this.checkAutor.nativeElement.checked && !this.checkTitulo.nativeElement.checked) { // Previene no se seleccione al menos un check
-      this.mensajeError = 'Debes seleccionar un checkbox al menos';
+      this.mensajeError = 'Debe seleccionar una opción.';
       return console.log('Debes seleccionar un check al menos');
     }
     this.mensajeError = '';
@@ -57,6 +65,15 @@ export class BuscarLibrosComponent implements OnInit {
       console.log('EN EL IF POR TITULO: ', this.isPorTitulo);
 
       console.log(this.valorBusqueda); // De esta manera accedemos al valor del campo
+
+      const isAutor: string = String(this.isPorAutor);
+      const isTitulo: string = String(this.isPorTitulo);
+
+      // Guardamos los valores de búsqueda en el localStorage
+      localStorage.setItem('busqueda', this.valorBusqueda);
+      localStorage.setItem('checkedA', isAutor);
+      localStorage.setItem('checkedT', isTitulo);
+
       this.usarFuse(this.valorBusqueda);
     } else {
       // Con esto asignamos a falso o unchecked los campos en caso de que se deseleccionen
@@ -70,35 +87,17 @@ export class BuscarLibrosComponent implements OnInit {
   }
 
   usarFuse(valorBusqueda) {
-    type SimpleBookFuse = { //descripcion del objeto para busqueda en fusejs
-      titulo: string;
-      author: {
-        firstName: string;
-        lastName: string;
-      };
-      tags: string[]
-    };
-    var books: SimpleBookFuse[] = [{ //libros de ejemplo 
-      'titulo': "Old Man's War",
-      'author': {
-        'firstName': 'John',
-        'lastName': 'Scalzi'
-      },
-      'tags': ['fiction']
-    }, {
-      'titulo': 'The Lock Artist',
-      'author': {
-        'firstName': 'Steve',
-        'lastName': 'Hamilton'
-      },
-      'tags': ['thriller']
-    }]
-    console.log("hola fuse");
+
+    const books: SimpleBookFuse[] = [];
+    console.log('hola fuse');
+
     const res = this.librosService.getLibros().toPromise();
+
     res.then(async l => {
       this.libros = await l.data;
-      for (let libro of this.libros) {
+      for (const libro of this.libros) {
         books.push({
+          'id': libro.ID_libro,
           'titulo': libro.titulo,
           'author': {
             'firstName': 'nombre ejemplo',
@@ -108,16 +107,28 @@ export class BuscarLibrosComponent implements OnInit {
         });
       }
       const options: Fuse.FuseOptions<SimpleBookFuse> = {
-        keys: ['titulo'],         //keys: ['titulo', 'author'], //puede buscar por mas de un campo
+        keys: ['titulo'],         // keys: ['titulo', 'author'], //puede buscar por mas de un campo
         caseSensitive: false,
-        threshold: .5,   //muy importe, rango de 0 <= theshold <= 1   // 0 require un match perfecto y 1 hará match con lo que sea
+        threshold: .5,   // muy importe, rango de 0 <= theshold <= 1   // 0 require un match perfecto y 1 hará match con lo que sea
         shouldSort: true,
       };
-      const fuse = new Fuse(books, options)
-      const results = fuse.search(valorBusqueda)
+      const fuse = new Fuse(books, options);
+      const results = fuse.search(valorBusqueda);
       console.log(results);
       this.libros = [];
-      this.libros = results
+      this.libros = results;
     });
+  }
+
+  // Para eliminar el localStorage y reseteamos los valores de los campos de búsqueda
+  limpiarHistorial() {
+    localStorage.clear();
+    this.isPorAutor = false;
+    this.isPorTitulo = false;
+    this.valorBusqueda = '';
+  }
+
+  abrirEditar(id) {
+    this.router.navigateByUrl(`libros/editar/${id}`);
   }
 }
