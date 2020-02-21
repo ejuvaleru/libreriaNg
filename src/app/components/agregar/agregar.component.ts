@@ -252,7 +252,7 @@ export class AgregarComponent implements OnInit {
       console.log(this.ejemplar);
       this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {
         console.log(e);
-        this.router.navigateByUrl('');
+        this.router.navigateByUrl('/libros');
       });
 
     } else {// no existe libro
@@ -451,8 +451,8 @@ export class AgregarComponent implements OnInit {
     console.log(this.ejemplar);
     this.librosService.insertarEjemplar(this.ejemplar).subscribe(e => {
       console.log(e);
-      if (e.message) {
-        this.router.navigateByUrl('');
+      if (e.message === 'Ejemplar creado exitosamente!') {
+        this.router.navigateByUrl('/libros');
       }
     });
 
