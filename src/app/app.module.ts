@@ -18,6 +18,7 @@ import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros.compo
 import { EjemplaresComponent } from './pages/ejemplares/ejemplares.component';
 import { LoginComponent } from './pages/login/login.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { SoporteComponent } from './pages/soporte/soporte.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { UsuariosComponent } from './pages/usuarios/usuarios.component';
     BuscarLibrosComponent,
     EjemplaresComponent,
     LoginComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    SoporteComponent
   ],
   imports: [
     BrowserModule,

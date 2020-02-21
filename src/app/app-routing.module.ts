@@ -12,6 +12,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { SoporteComponent } from './pages/soporte/soporte.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -32,7 +33,8 @@ const routes: Routes = [
       {path: '', component: UsuariosComponent},
       // {path: 'agregar-usuario', component: }
     ]
-  }
+  },
+  { path: 'soporte', component: SoporteComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
