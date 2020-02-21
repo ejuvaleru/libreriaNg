@@ -16,6 +16,8 @@ import { EditarComponent } from './components/editar/editar.component';
 import { LibrosComponent } from './pages/libros/libros.component';
 import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros.component';
 import { EjemplaresComponent } from './pages/ejemplares/ejemplares.component';
+import { LoginComponent } from './pages/login/login.component';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { EjemplaresComponent } from './pages/ejemplares/ejemplares.component';
     EditarComponent,
     LibrosComponent,
     BuscarLibrosComponent,
-    EjemplaresComponent
+    EjemplaresComponent,
+    LoginComponent,
+    UsuariosComponent
   ],
   imports: [
     BrowserModule,

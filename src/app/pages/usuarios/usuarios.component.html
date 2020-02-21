@@ -1,0 +1,47 @@
+<div class="container">
+  <h2>Usuarios</h2>
+
+  <!-- <div class="row">
+    <div class="col">
+      <a *ngIf="usuarios?.length > 0" class="btn btn-primary" routerLink="/agregar-usuario"><i class="fa fa-plus fa-lg"></i>
+        Agregar
+        usuario</a>
+    </div>
+    <div class="col-auto">
+      <a *ngIf="usuarios" class="btn btn-info" (click)="cargar()"><i class="fa fa-refresh fa-lg"></i>
+        Recargar</a>
+    </div>
+  </div> -->
+  <div class="container p-4" *ngIf="usuarios?.length === 0">
+    <h4 class="text-center">No hay nada agregado aún.</h4>
+    <div class="text-center">
+      <a class="btn btn-primary" routerLink="/agregar">Agregar tu primer libro</a>
+    </div>
+  </div>
+  <div class="container p-4" *ngIf="usuarios?.length > 0">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th class="text-center" scope="col">Nombre</th>
+          <th class="text-center" scope="col">Usuario</th>
+          <!-- <th class="text-center" scope="col">Acciones</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of usuarios">
+          <td class="text-center">{{user.nombre}}</td>
+          <td class="text-center">{{user.nombre_usuario}}</td>
+          <!-- <td class="text-center">
+            <a class="btn btn-secondary" routerLink="editar/{{item.a.ID_libro}}" routerLinkActive="router-link-active">
+              <i class="fa fa-edit fa-lg"></i> Editar
+            </a>
+            <a class="btn btn-light ml-2" routerLink="ejemplares/{{item.a.ID_libro}}"
+              routerLinkActive="router-link-active">
+              <i class="fa fa-book fa-lg"></i> Ejemplares
+            </a>
+          </td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -4,26 +4,33 @@
     <!-- Sidebar -->
     <nav id="sidebar" #sidebar>
         <div class="sidebar-header">
-            <h3>Hola...</h3>
+            <h3>Hola...{{auth.usuario?.nombre || usuarioNombre}}</h3>
         </div>
 
         <ul class="list-unstyled components">
             <h4 class="ml-2">Menú</h4>
             <li class="mt-2">
-                <a routerLink="/" (click)="mostrarMenu()"><i class="fa fa-dashboard fa-lg"></i><span> Dashboard</span></a>
+                <a routerLink="/dashboard" (click)="mostrarMenu()"><i class="fa fa-dashboard fa-lg"></i><span>
+                        Dashboard</span></a>
             </li>
             <li class="mt-2">
                 <a routerLink="/libros" (click)="mostrarMenu()"><i class="fa fa-book fa-lg"></i><span> Libros</span></a>
             </li>
             <li class="mt-2">
+                <a routerLink="/usuarios" (click)="mostrarMenu()"><i class="fa fa-user fa-lg"></i><span> Usuarios</span></a>
+            </li>
+            <li class="mt-2">
                 <a href="#"><i class="fa fa-info-circle fa-lg"></i><span> Soporte</span></a>
+            </li>
+            <li class="mt-2">
+                <a (click)="logout()"><i class="fa fa-close fa-lg"></i><span> Cerrar sesión</span></a>
             </li>
         </ul>
 
     </nav>
     <!-- Page Content -->
     <div id="content">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="(isLogin | async)">
             <div class="container-fluid">
                 <button (click)="mostrarMenu()" class="btn btn-info">
                     <i class="fa fa-bars fa-lg"></i>
