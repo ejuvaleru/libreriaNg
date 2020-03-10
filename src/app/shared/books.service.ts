@@ -41,6 +41,14 @@ export class BooksService {
     return this.http.get(`${this.url}ejemplares/${id}/libro`);
   }
 
+  getEjemplarePorId(id): Observable<any> {
+    return this.http.get(`${this.url}ejemplares/${id}`);
+  }
+
+  actualizarEjemplar(id, ejemplar): Observable<any> {
+    return this.http.put(`${this.url}ejemplares/${id}`, ejemplar, { headers: { 'Content-Type': 'application/json' } });
+  }
+
   // Obtenemos todos los libros de la base de datos
   getLibros(): Observable<any> {
     console.log('Petición de libros');
@@ -49,6 +57,10 @@ export class BooksService {
 
   insertarEditorial(editorial): Observable<any> {
     return this.http.post(`${this.url}editoriales/`, editorial, { headers: { 'Content-Type': 'application/json' } });
+  }
+
+  getEditorialPorId(id): Observable<any> {
+    return this.http.get(`${this.url}editoriales/${id}`);
   }
 
   // Obtenemos todas las editoriales de la BD
@@ -67,6 +79,14 @@ export class BooksService {
 
   insertarAutorLibro(autorLibro): Observable<any> {
     return this.http.post(`${this.url}autoresLibros/`, autorLibro, { headers: { 'Content-Type': 'application/json' } });
+  }
+
+  getAutorPorId(id): Observable<any> {
+    return this.http.get(`${this.url}autores/${id}`);
+  }
+
+  getAutorLibroPorIdLibro(id) {
+    return this.http.get(`${this.url}autoresLibros/libro/${id}`)
   }
 
   // Obtenemos autores de la BD
@@ -109,4 +129,7 @@ export class BooksService {
     return this.http.get(`${this.url}nomenclaturas/datos?AREA_ID_area=${areaid}&SUBAREA_ID_subarea=${subareaid}&TEMA_ID_tema=${temaid}&SUBTEMA_ID_subtema=${subtemaid}&SUBSUBTEMA_ID_subsubtema=${subsubtemaid}`);
   }
 
+  getNomenclaturas(): Observable<any> {
+    return this.http.get(`${this.url}nomenclaturas/`);
+  }
 }

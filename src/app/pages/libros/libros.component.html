@@ -22,7 +22,7 @@
       <a class="btn btn-primary" routerLink="/agregar">Agregar tu primer libro</a>
     </div>
   </div>
-  <div class="container p-4" *ngIf="libros?.length > 0">
+  <!-- <div class="container p-4" *ngIf="libros?.length > 0">
     <table class="table table-hover">
       <thead>
         <tr>
@@ -53,5 +53,60 @@
         </tr>
       </tbody>
     </table>
+  </div> -->
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let row"> {{row?.id}} </td>
+      </ng-container>
+
+      <!-- titulo Column -->
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Título </th>
+        <td mat-cell *matCellDef="let row"> {{row?.titulo}} </td>
+      </ng-container>
+
+      <!-- isbn Column -->
+      <ng-container matColumnDef="isbn">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ISBN </th>
+        <td mat-cell *matCellDef="let row"> {{row?.isbn}} </td>
+      </ng-container>
+
+      <!-- Edicion Column -->
+      <ng-container matColumnDef="edicion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edición </th>
+        <td mat-cell *matCellDef="let row"> {{row?.edicion}} </td>
+      </ng-container>
+
+      <!-- Ejemplares Column -->
+      <ng-container matColumnDef="cEjemplares">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> No. Ejemplares </th>
+        <td mat-cell *matCellDef="let row"> {{row?.cEjemplares}} </td>
+      </ng-container>
+
+      <!-- Acciones Column -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </th>
+        <td mat-cell *matCellDef="let row">
+          <a class="btn btn-secondary" routerLink="editar/{{row?.id}}">
+            <i class="fa fa-edit fa-lg"></i> Editar
+          </a>
+          <a class="btn btn-light ml-2" routerLink="ejemplares/{{row?.id}}"
+            routerLinkActive="router-link-active">
+            <i class="fa fa-book fa-lg"></i> Ejemplares
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </div>
 </div>

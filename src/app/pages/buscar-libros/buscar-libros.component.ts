@@ -131,4 +131,8 @@ export class BuscarLibrosComponent implements OnInit {
   abrirEditar(id) {
     this.router.navigateByUrl(`libros/editar/${id}`);
   }
+
+  abrirEjemplares(id) {
+    this.router.navigateByUrl(`libros/ejemplares/${id}`)
+  }
 }

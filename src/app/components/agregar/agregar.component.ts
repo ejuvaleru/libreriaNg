@@ -7,6 +7,7 @@ import { BooksService } from 'src/app/shared/books.service';
 //import { Country } from 'src/app/shared/country';
 //import { State } from 'src/app/shared/state';
 import { DropDownOption } from 'src/app/shared/dropdownoption';
+import { UsersService } from 'src/app/shared/users.service';
 
 @Component({
   selector: 'app-agregar',
@@ -41,7 +42,6 @@ export class AgregarComponent implements OnInit {
     campoCostoCompra: [''],
     campoCostoVenta: [''],
     campoCostoDescuento: [''],
-    campoFecha: [''],
   });
 
   googleForm = this.fb.group({
@@ -83,11 +83,13 @@ export class AgregarComponent implements OnInit {
     private router: Router,
     private bookApiService: BookapiService,
     private librosService: BooksService,
+    private userService: UsersService
   ) { }
 
   ngOnInit() {
     //this.countries = this.librosService.getCountries();
     this.areaOpciones = [];
+
     //this.onSelect(this.selectedCountry.id);
     const res = this.librosService.getAreas().toPromise();
     res.then(async a => {
@@ -226,9 +228,14 @@ export class AgregarComponent implements OnInit {
         });
       });
     });
+  }
 
-    /* Utilizando el angular Router, podemos navegar entre páginas, así que es muy util para volver automáticamente
-     cuando el formulario es llenado y enviado */
+  async obtenerRol() {
+    // De esta manera obtenemos el ROL del usuario logueado
+    let usuario = await JSON.parse(localStorage.getItem('user'));
+    this.userService.getRolPorId(usuario.ROL_id).subscribe(res => {
+      console.log('ROL', res.data.nombre);
+    });
   }
 
   crear() {
@@ -455,7 +462,6 @@ export class AgregarComponent implements OnInit {
         this.router.navigateByUrl('/libros');
       }
     });
-
   }
 
   // Método para insertar editorial
@@ -526,11 +532,10 @@ export class AgregarComponent implements OnInit {
       campoEdicion: [''],
       campoPaginas: [this.libro.noPaginas],
       campoEstado: [''],
-      campoDesc: [this.libro.descripcion],
+      campoDesc: [''],
       campoCostoCompra: [''],
       campoCostoVenta: [''],
       campoCostoDescuento: [''],
-      campoFecha: [''],
     });
   }
 

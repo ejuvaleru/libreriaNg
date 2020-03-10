@@ -1,0 +1,37 @@
+<div class="container">
+  <a class="btn btn-primary" (click)="volver()" routerLinkActive="router-link-active">Volver</a>
+  <form *ngIf="formEditarEjemplar" [formGroup]="formEditarEjemplar" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="campo-estado">Estado</label>
+      <input class="form-control" type="text" id="campo-estado" placeholder="Estado del ejemplar" formControlName="campoEstado"
+        autofocus>
+    </div>
+    <div class="form-group">
+      <label for="campo-desc">Descripción</label>
+      <input class="form-control" type="text" id="campo-desc" formControlName="campoDescripcion" placeholder="Descripción">
+    </div>
+    <div class="form-group">
+      <label for="campo-compra">Costo compra</label>
+      <input class="form-control" type="number" id="campo-compra" formControlName="campoCostoCompra"
+        placeholder="Costo compra" required>
+    </div>
+    <div class="form-group">
+      <label for="campo-venta">Costo Venta</label>
+      <input class="form-control" type="number" id="campo-venta" formControlName="campoCostoVenta" placeholder="Costo venta"
+        required>
+    </div>
+    <div class="form-group">
+      <label for="campo-descuento">Costo descuento</label>
+      <input class="form-control" type="number" id="campo-descuento" formControlName="campoCostoDescuento"
+        placeholder="Costo descuento" required>
+    </div>
+    <div class="form-group">
+      <label for="campo-fecha">Fecha de Adquisición</label>
+      <input class="form-control" type="date" id="campo-fecha" formControlName="campoFechaAdquisicion"
+        placeholder="Fecha de Adquisición" readonly>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit" [disabled]="!formEditarEjemplar.valid">
+      Actualizar
+    </button>
+  </form>
+</div>

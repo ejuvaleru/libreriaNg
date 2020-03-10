@@ -13,6 +13,9 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { SoporteComponent } from './pages/soporte/soporte.component';
+import { NomenclaturasComponent } from './pages/nomenclaturas/nomenclaturas.component';
+import { VentasComponent } from './pages/ventas/ventas.component';
+import { EditarEjemplarComponent } from './pages/editar-ejemplar/editar-ejemplar.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -23,14 +26,32 @@ const routes: Routes = [
   {
     path: 'libros', children: [
       { path: '', component: LibrosComponent },
-      { path: 'ejemplares/:id', component: EjemplaresComponent },
+      {
+        path: 'ejemplares/:id', children: [
+          { path: '', component: EjemplaresComponent },
+          { path: 'editar-ejemplar/:idEjemplar', component: EditarEjemplarComponent },
+        ]
+      },
+
       { path: 'editar/:id', component: EditarComponent },
       { path: 'buscar-libros', component: BuscarLibrosComponent },
     ], canActivate: [AuthGuard]
   },
   {
     path: 'usuarios', children: [
-      {path: '', component: UsuariosComponent},
+      { path: '', component: UsuariosComponent },
+      // {path: 'agregar-usuario', component: }
+    ]
+  },
+  {
+    path: 'nomenclaturas', children: [
+      { path: '', component: NomenclaturasComponent },
+      // {path: 'agregar-usuario', component: }
+    ]
+  },
+  {
+    path: 'ventas', children: [
+      { path: '', component: VentasComponent },
       // {path: 'agregar-usuario', component: }
     ]
   },

@@ -1,169 +1,184 @@
-<div class="container">
+<div class="">
   <a class="btn btn-light" routerLink="/libros">Volver</a>
   <h2>Agregar Libro</h2>
-  <div class="formulario">
-    <div class="formulario-libro">
-      <form class="p-4" [formGroup]="libroForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label class="my-1 mr-2">Título</label>
-          <input class="form-control" type="text" id="campo-titulo" placeholder="Título" formControlName="campoTitulo"
-            autofocus>
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Autor</label>
-          <input class="form-control" type="text" id="campo-autor" formControlName="campoAutor" placeholder="Autor">
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Editorial</label>
-          <input class="form-control" type="text" id="campo-editorial" formControlName="campoEditorial"
-            placeholder="Editorial">
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">ISBN</label>
-          <input class="form-control" type="text" id="campo-isbn" formControlName="campoIsbn" placeholder="ISBN"
-            required>
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Edición</label>
-          <input class="form-control" type="number" id="campo-no-de-edicion" formControlName="campoEdicion" min="1"
-            placeholder="No. Edición">
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Número de páginas</label>
-          <input class="form-control" type="number" min="1" id="campo-num-de-paginas" formControlName="campoPaginas"
-            placeholder="No. Páginas">
-        </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div>
+        <form class="p-4" [formGroup]="libroForm" (ngSubmit)="onSubmit()">
+          <!-- INICIA DATOS TÉCNICOS DEL LIBRO -->
+          <h3>Datos del libro</h3>
+          <div class="ml-5">
+            <div class="form-group">
+              <label class="my-1 mr-2">Título</label>
+              <input class="form-control" type="text" id="campo-titulo" placeholder="Título"
+                formControlName="campoTitulo" autofocus>
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">Autor</label>
+              <input class="form-control" type="text" id="campo-autor" formControlName="campoAutor" placeholder="Autor">
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">Editorial</label>
+              <input class="form-control" type="text" id="campo-editorial" formControlName="campoEditorial"
+                placeholder="Editorial">
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">ISBN</label>
+              <input class="form-control" type="text" id="campo-isbn" formControlName="campoIsbn" placeholder="ISBN"
+                required>
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">Edición</label>
+              <input class="form-control" type="number" id="campo-no-de-edicion" formControlName="campoEdicion" min="1"
+                placeholder="No. Edición">
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">Número de páginas</label>
+              <input class="form-control" type="number" min="1" id="campo-num-de-paginas" formControlName="campoPaginas"
+                placeholder="No. Páginas">
+            </div>
+          </div>
+          <!-- TERMINA DATOS TÉCNICOS DEL LIBRO -->
 
-        <div class="form-group">
-          <label class="my-1 mr-2">Estado</label>
-          <select class="form-control" id="campo-estado" formControlName="campoEstado">
-            <option selected>Seleccionar...</option>
-            <option value="Nuevo">Nuevo</option>
-            <option value="Usado">Usado</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Descripción</label>
-          <input class="form-control" type="text" id="campo-descripcion" formControlName="campoDesc"
-            placeholder="Descripción">
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Costo de compra</label>
-          <input class="form-control" type="number" id="campo-costo-compra" formControlName="campoCostoCompra"
-            placeholder="Costo de compra">
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Costo de venta</label>
-          <input class="form-control" type="number" id="campo-costo-venta" formControlName="campoCostoVenta"
-            placeholder="Costo venta">
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Costo con descuento</label>
-          <input class="form-control" type="number" id="campo-costo-descuento" formControlName="campoCostoDescuento"
-            placeholder="Costo Descuento">
-        </div>
-        <div class="form-group">
-          <label class="my-1 mr-2">Fecha de registro</label>
-          <input class="form-control" type="date" id="campo-fecha-adquisicion" formControlName="campoFecha"
-            placeholder="Fecha de adquisición">
-        </div>
-        <button class="btn btn-primary btn-block" type="submit" [disabled]="!libroForm.valid">
-          Agregar
-        </button>
-      </form>
-    </div>
-    <!-- AQUÍ ESTÁ EL BUSCADOR EN LA API DE GOOGLE-->
-    <div class="buscador-libro">
-      <h3>Buscar en Google Books</h3>
-      <!--FORMULARIO DE BÚSQUEDA-->
-      <form [formGroup]="googleForm" (ngSubmit)="buscarPorIsbn()">
-        <span>
-          ISBN 13:
-        </span>
-        <div class="input-group">
-          <input class="form-control" type="number" id="campo-Isbn-Api" formControlName="isbnApiCampo"
-            placeholder="i.e. 9780061199004" required minlength="8" min="1">
-          <button class="btn btn-block" [disabled]="!googleForm.valid || cargando" style="background-color: #4285F4; color: white;">
-            <span>Buscar en </span>
-            <i class="fa fa-google fa-lg"></i>
+          <!-- INICIA ESTADO DEL LIBRO-->
+          <h3>Estado del libro</h3>
+          <div class="ml-5">
+            <div class="form-group">
+              <label class="my-1 mr-2">Estado</label>
+              <select class="form-control" id="campo-estado" formControlName="campoEstado" placeholder="Seleccionar...">
+                <option value="Nuevo">Nuevo</option>
+                <option value="Usado">Usado</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">Descripción</label>
+              <input class="form-control" type="text" id="campo-descripcion" formControlName="campoDesc"
+                placeholder="Descripción">
+            </div>
+          </div>
+          <!-- TERMINA ESTADO DEL LIBRO -->
+          <h3>Costes del libro</h3>
+          <div class="ml-5">
+            <div class="form-group">
+              <label class="my-1 mr-2">Costo de compra</label>
+              <input class="form-control" type="number" id="campo-costo-compra" formControlName="campoCostoCompra"
+                placeholder="Costo de compra">
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">Costo de venta</label>
+              <input class="form-control" type="number" id="campo-costo-venta" formControlName="campoCostoVenta"
+                placeholder="Costo venta">
+            </div>
+            <div class="form-group">
+              <label class="my-1 mr-2">Costo con descuento</label>
+              <input class="form-control" type="number" id="campo-costo-descuento" formControlName="campoCostoDescuento"
+                placeholder="Costo Descuento">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit" [disabled]="!libroForm.valid">
+            Agregar
           </button>
-        </div>
-      </form>
-      <!--RESULTADOS DE BÚSQUEDA-->
-      <div *ngIf="cargando" class="text-center">
-        <div class="lds-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        </form>
       </div>
-
-      <div class="m-4" *ngIf="items?.totalItems === 0">
-        <p class="text-center">No hay resultados que coincidan. Intente otra vez.</p>
-      </div>
-
-      <div class="card bg-dark" *ngIf="libro">
-        <div class="card-header">
-          <h4 class="card-title">Titutlo: {{libro.titulo}}</h4>
-          <p class="card-subtitle">Autor: {{libro.autor}}</p>
-        </div>
-        <div class="card-body">
-          <p class="card-text">Desc: {{libro.descripcion}}</p>
-          <p>No. Pag: {{libro.noPaginas}}</p>
-          <p>ISBN 13: {{libro.isbn}}</p>
-          <p *ngIf="libro.editorial">Editorial: {{libro.editorial}}</p>
-          <div class="text-center">
-            <img *ngIf="libro.portada" [src]="libro.portada" alt="Portada del libro">
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <!-- AQUÍ ESTÁ EL BUSCADOR EN LA API DE GOOGLE-->
+      <div class="">
+        <h3>Buscar en Google Books</h3>
+        <!--FORMULARIO DE BÚSQUEDA-->
+        <form [formGroup]="googleForm" (ngSubmit)="buscarPorIsbn()">
+          <span>
+            ISBN 13:
+          </span>
+          <div class="input-group">
+            <input class="form-control" type="number" id="campo-Isbn-Api" formControlName="isbnApiCampo"
+              placeholder="i.e. 9780061199004" required minlength="8" min="1">
+            <button class="btn btn-block" [disabled]="!googleForm.valid || cargando"
+              style="background-color: #4285F4; color: white;">
+              <span>Buscar en </span>
+              <i class="fab fa-google fa-md"></i>
+            </button>
+          </div>
+        </form>
+        <!--RESULTADOS DE BÚSQUEDA-->
+        <div *ngIf="cargando" class="text-center">
+          <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
         </div>
-        <div class="card-footer">
-          <button class="btn btn-info" (click)="rellenarForm()">Rellenar formulario</button>
+
+        <div class="m-4" *ngIf="items?.totalItems === 0">
+          <p class="text-center">No hay resultados que coincidan. Intente otra vez.</p>
+        </div>
+
+        <div class="card bg-dark" *ngIf="libro">
+          <div class="card-header">
+            <h4 class="card-title">Titutlo: {{libro.titulo}}</h4>
+            <p class="card-subtitle">Autor: {{libro.autor}}</p>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Desc: {{libro.descripcion}}</p>
+            <p>No. Pag: {{libro.noPaginas}}</p>
+            <p>ISBN 13: {{libro.isbn}}</p>
+            <p *ngIf="libro.editorial">Editorial: {{libro.editorial}}</p>
+            <div class="text-center">
+              <img *ngIf="libro.portada" [src]="libro.portada" alt="Portada del libro">
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-info" (click)="rellenarForm()">Rellenar formulario</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 <!--ejemplo de https://stackblitz.com/edit/cascading-dropdown-angular?file=app%2Fapp.module.ts-->
-<label>Area:</label>
-<select [(ngModel)]="selectedArea.id" (change)="onSelect1($event.target.value)">
-  <option value="0">--Select--</option>
-  <option *ngFor="let opcion of areaOpciones" value={{opcion.id}}>{{opcion.name}}</option>
-</select>
+<div class="container">
+  <div class="form-group">
+    <label for="campo-area">Área</label>
+    <select class="form-control" id="campo-area" [(ngModel)]="selectedArea.id"
+      (change)="onSelect1($event.target.value)">
+      <option value="0">--Seleccione un área--</option>
+      <option *ngFor="let opcion of areaOpciones" value={{opcion.id}}>{{opcion.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="campo-subarea">Subárea</label>
+    <select class="form-control" id="campo-subarea" [(ngModel)]="selectedSubarea.id"
+      (change)="onSelect2($event.target.value)">
+      <option value="0">--Seleccione una subárea--</option>
+      <option *ngFor="let opcion of subareaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="campo-tema">Tema:</label>
+    <select class="form-control" id="campo-tema" [(ngModel)]="selectedTema.id"
+      (change)="onSelect3($event.target.value)">
+      <option value="0">--Seleccione un tema--</option>
+      <option *ngFor="let opcion of temaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+    </select>
+  </div>
 
-<br /><br />
+  <div class="form-group">
+    <label for="campo-subtema">Subtema:</label>
+    <select class="form-control" id="campo-subtema" [(ngModel)]="selectedSubtema.id"
+      (change)="onSelect4($event.target.value)">
+      <option value="0">--Seleccione un subtema--</option>
+      <option *ngFor="let opcion of subtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="campo-subsubtema">Subsubtema:</label>
+    <select class="form-control" id="campo-subsubtema" [(ngModel)]="selectedSubsubtema.id"
+      (change)="onSelect5($event.target.value)">
+      <option value="0">--Seleccione un subsubtema--</option>
+      <option *ngFor="let opcion of subsubtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
+    </select>
+  </div>
 
-<div>
-  <label>Subarea:</label>
-  <select [(ngModel)]="selectedSubarea.id" (change)="onSelect2($event.target.value)">
-    <option value="0">--Select--</option>
-    <option *ngFor="let opcion of subareaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
-  </select>
+  <label>Nomenclatura: {{nomen}}</label>
 </div>
-
-
-
-<div>
-  <label>Tema:</label>
-  <select [(ngModel)]="selectedTema.id" (change)="onSelect3($event.target.value)">
-    <option value="0">--Select--</option>
-    <option *ngFor="let opcion of temaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
-  </select>
-</div>
-
-<div>
-  <label>Subtema:</label>
-  <select [(ngModel)]="selectedSubtema.id" (change)="onSelect4($event.target.value)">
-    <option value="0">--Select--</option>
-    <option *ngFor="let opcion of subtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
-  </select>
-</div>
-<div>
-  <label>Subsubtema:</label>
-  <select [(ngModel)]="selectedSubsubtema.id" (change)="onSelect5($event.target.value)">
-    <option value="0">--Select--</option>
-    <option *ngFor="let opcion of subsubtemaOpciones " value={{opcion.id}}>{{opcion.name}}</option>
-  </select>
-</div>
-
-<label>nomenclatura {{nomen}}</label>

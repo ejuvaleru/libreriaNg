@@ -8,16 +8,24 @@
         <tr>
           <th scope="col">Estado</th>
           <th scope="col">Descripcion</th>
+          <th scope="col">Costo de compra</th>
           <th scope="col">Costo de venta</th>
           <th scope="col">Costo con descuento</th>
+          <th scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of ejemplares; let i = index">
           <td>{{item.estado}}</td>
           <td>{{item.descripcion}}</td>
+          <td>{{item.costo_compra}}</td>
           <td>{{item.costo_venta}}</td>
           <td>{{item.costo_descuento}}</td>
+          <td>
+            <a class="btn btn-secondary" routerLink="editar-ejemplar/{{item.ID_ejemplares}}">
+              <i class="fa fa-edit fa-lg"></i> Editar
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>

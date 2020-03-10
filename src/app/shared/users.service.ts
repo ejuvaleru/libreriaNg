@@ -17,4 +17,12 @@ export class UsersService {
   getUsers(): Observable<any> {
     return this.http.get(`${this.url}usuarios/`);
   }
+
+  getRoles(): Observable<any> {
+    return this.http.get(`${this.url}roles/`);
+  }
+
+  getRolPorId(id): Observable<any> {
+    return this.http.get(`${this.url}roles/${id}`);
+  }
 }

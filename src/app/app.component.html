@@ -10,20 +10,28 @@
         <ul class="list-unstyled components">
             <h4 class="ml-2">Menú</h4>
             <li class="mt-2">
-                <a routerLink="/dashboard" (click)="mostrarMenu()"><i class="fa fa-dashboard fa-lg"></i><span>
+                <a routerLink="/dashboard" (click)="mostrarMenu()"><i class="fa fa-dashboard fa-md"></i><span>
                         Dashboard</span></a>
             </li>
             <li class="mt-2">
-                <a routerLink="/libros" (click)="mostrarMenu()"><i class="fa fa-book fa-lg"></i><span> Libros</span></a>
+                <a routerLink="/ventas" (click)="mostrarMenu()"><i class="fa fa-store fa-md"></i><span> Ventas</span></a>
             </li>
             <li class="mt-2">
-                <a routerLink="/usuarios" (click)="mostrarMenu()"><i class="fa fa-user fa-lg"></i><span> Usuarios</span></a>
+                <a routerLink="/libros" (click)="mostrarMenu()"><i class="fa fa-book fa-md"></i><span> Libros</span></a>
             </li>
             <li class="mt-2">
-                <a routerLink="/soporte" (click)="mostrarMenu()"><i class="fa fa-info-circle fa-lg"></i><span> Soporte</span></a>
+                <a routerLink="/nomenclaturas" (click)="mostrarMenu()"><i class="fa fa-bookmark fa-md"></i><span> Nomenclaturas</span></a>
             </li>
             <li class="mt-2">
-                <a (click)="logout()"><i class="fa fa-close fa-lg"></i><span> Cerrar sesión</span></a>
+                <a routerLink="/usuarios" (click)="mostrarMenu()"><i class="fa fa-user fa-md"></i><span>
+                        Usuarios</span></a>
+            </li>
+            <li class="mt-2">
+                <a routerLink="/soporte" (click)="mostrarMenu()"><i class="fa fa-info-circle fa-md"></i><span>
+                        Soporte</span></a>
+            </li>
+            <li class="mt-2">
+                <a (click)="logout()"><i class="fa fa-close fa-md"></i><span> Cerrar sesión</span></a>
             </li>
         </ul>
 
@@ -33,7 +41,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="(isLogin | async)">
             <div class="container-fluid">
                 <button (click)="mostrarMenu()" class="btn btn-info">
-                    <i class="fa fa-bars fa-lg"></i>
+                    <i class="fa fa-bars fa-md"></i>
                     <span> Menú</span>
                 </button>
                 <!-- <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a> -->

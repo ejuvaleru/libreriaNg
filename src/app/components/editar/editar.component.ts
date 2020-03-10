@@ -17,6 +17,11 @@ export class EditarComponent implements OnInit {
   titulo = '';
   formEditarLibro: FormGroup;
 
+  idEditorial: number; // Utilizado para obtener la información de la editorial (búsqueda por ID)
+  editorial;
+
+  autorNombre = '';
+
   constructor(
     private router: Router,
     private location: Location,
@@ -26,15 +31,32 @@ export class EditarComponent implements OnInit {
   ) { }
 
   // Este ciclo de vida de Angular permite crear todo lo que necesitamos para trabajar con el libro
-  // IGNORAR errores en la consola respecto al Form, carga y actualiza los valores sin problema
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     console.log(this.id);
-    this.libro = this.bookService.obtenerLibroId(this.id).subscribe(l => {
-      this.libro = l;
-      console.log(this.libro);
+    this.bookService.obtenerLibroId(this.id).subscribe(l => {
       if (l) {
-        this.formulario();
+        this.libro = l;
+        this.idEditorial = this.libro.EDITORIAL_ID_editorial;
+        this.bookService.getEditorialPorId(this.idEditorial).toPromise().then(res => {
+          if (res.code === 200) {
+            this.editorial = res.data;
+            console.log(this.editorial);
+            this.obtenerAutorLibro(this.id).then(res => {
+              console.log(res.data);
+              if (res.code === 200) {
+                const idAutor = res.data.AUTOR_ID_autor;
+                console.log('ID AUTOR ', idAutor);
+                this.obtenerAutorPorId(idAutor).then(autor => {
+                  console.log(autor.nombre_autor);
+                  this.autorNombre = autor.nombre_autor;
+                  this.formulario();
+                });
+              }
+            });
+          }
+        });
+        console.log(this.libro);
       }
     });
   }
@@ -43,7 +65,11 @@ export class EditarComponent implements OnInit {
   async formulario() {
     this.formEditarLibro = await this.fb.group({
       'campoTitulo': [this.libro.titulo],
+      'campoAutor': [this.autorNombre],
       'campoIsbn': [this.libro.isbn],
+      'campoNoPagina': [this.libro.num_pagina],
+      'campoNoEdicion': [this.libro.num_edicion],
+      'campoEditorial': [this.editorial.nombre_editorial],
     });
   }
 
@@ -57,6 +83,16 @@ export class EditarComponent implements OnInit {
         this.router.navigateByUrl('/libros');
       }
     });
+  }
+
+  // Búscamos en la tabla AutorLibro los registros que coincidan con el autor
+  obtenerAutorLibro(id): Promise<any> {
+    return this.bookService.getAutorLibroPorIdLibro(id).toPromise();
+  }
+
+  // Una vez obtenida la tabla AutorLibro utilizamos el id del autor para obtenerlo de la tabla autores
+  obtenerAutorPorId(id): Promise<any> {
+    return this.bookService.getAutorPorId(id).toPromise();
   }
 
   volver() {

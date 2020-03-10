@@ -1,0 +1,21 @@
+.card{
+    background-color: #fff;
+    border: 4px solid rgba(255, 255, 255, 0.125);
+    border-radius: 0.30rem;
+    width: 11rem;
+}
+.card-img-overlay {
+    background-color: rgba(#000, 0.6);
+}
+.sales{
+    display: flex;
+}
+.products-search{
+    width: 50%;
+    background-color: red;
+}
+
+.order-generator{
+    width: 50%;
+    background-color: blue;
+}
